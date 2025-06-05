@@ -1,7 +1,6 @@
-#ifndef __AO_H
-#define __AO_H
+#ifndef __ao_h
+#define __ao_h
 
 int main(int, char**);
 
 #endif
-

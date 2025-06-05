@@ -1,5 +1,5 @@
-#ifndef __AIO_H
-#define __AIO_H
+#ifndef __aio_h
+#define __aio_h
 
 #include <CoreAudio/CoreAudio.h>
 
@@ -14,4 +14,3 @@ OSStatus aio(
 );
 
 #endif
-

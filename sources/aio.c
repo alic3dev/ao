@@ -1,10 +1,9 @@
-#include "aio.h"
+#include <aio.h>
+#include <amplitude.h>
 
 #include <stdio.h>
 
 #include <CoreAudio/CoreAudio.h>
-
-#include "amplitude.h"
 
 OSStatus aio(
   AudioObjectID id_audio_object,
@@ -33,11 +32,11 @@ OSStatus aio(
     unsigned char byte;
     
     for (
-      unsigned long int index_buffer = 0;
-      index_buffer < size_buffer_out;
-      ++index_buffer
+      unsigned long int index_buffer_out = 0;
+      index_buffer_out < size_buffer_out;
+      ++index_buffer_out
     ) {
-      unsigned long int channel = index_buffer % count_channel_out;
+      unsigned long int channel = index_buffer_out % count_channel_out;
 
       if (channel == 0) {
         byte = getc(data_file);
@@ -47,7 +46,7 @@ OSStatus aio(
         rewind(data_file);
       }
 
-      buffer_out[index_buffer] = (
+      buffer_out[index_buffer_out] = (
         (
           ((float)(byte) / 127.5f)
            - 1.0f
@@ -58,4 +57,3 @@ OSStatus aio(
 
   return 0;
 }
-

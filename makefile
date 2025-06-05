@@ -1,36 +1,35 @@
-NAME=ao
+name=ao
 
-PATH_DIRECTORY_CERO=../cer0
-PATH_DIRECTORY_CERO_LIBRARY=${PATH_DIRECTORY_CERO}/library
-PATH_DIRECTORY_INCLUDE=include
-PATH_DIRECTORY_OBJECTS=objects
-PATH_DIRECTORY_OUTPUT=output
-PATH_DIRECTORY_SOURCES=sources
+path_directory_cero=../cer0
+path_directory_cero_library=${path_directory_cero}/library
+path_directory_include=include
+path_directory_objects=objects
+path_directory_output=output
+path_directory_sources=sources
 
-PATH_FILE_OBJECT_CERO=${PATH_DIRECTORY_CERO_LIBRARY}/cer0.o
-PATH_FILE_OUTPUT=${PATH_DIRECTORY_OUTPUT}/${NAME}
+path_file_object_cero=${path_directory_cero_library}/cer0.o
+path_file_output=${path_directory_output}/${name}
 
-FILES_SOURCES=${wildcard ${PATH_DIRECTORY_SOURCES}/*.c}
-FILES_OBJECTS=${patsubst ${PATH_DIRECTORY_SOURCES}/%.c,${PATH_DIRECTORY_OBJECTS}/%.o,${FILES_SOURCES}}
+files_sources=${wildcard ${path_directory_sources}/*.c}
+files_objects=${patsubst ${path_directory_sources}/%.c,${path_directory_objects}/%.o,${files_sources}}
 
-C_OPTS=-O3 -I${PATH_DIRECTORY_INCLUDE} -I../cer0/include
-C_OPTS_EXECUTABLE=-framework CoreAudio
+c_opts=-O3 -I${path_directory_include} -I../cer0/include
+c_opts_executable=-framework CoreAudio
 
-CC=clang
+cc=clang
 
-${PATH_FILE_OUTPUT}: ${FILES_OBJECTS} ${PATH_DIRECTORY_OUTPUT}
-	${CC} ${C_OPTS} ${C_OPTS_EXECUTABLE} ${FILES_OBJECTS} ${PATH_FILE_OBJECT_CERO} -o ${PATH_FILE_OUTPUT}
+${path_file_output}: ${files_objects} ${path_directory_output}
+	${cc} ${c_opts} ${c_opts_executable} ${files_objects} ${path_file_object_cero} -o ${path_file_output}
 
-${PATH_DIRECTORY_OBJECTS}/%.o: ${PATH_DIRECTORY_SOURCES}/%.c ${PATH_DIRECTORY_OBJECTS}
-	${CC} ${C_OPTS} -c $< -o $@
+${path_directory_objects}/%.o: ${path_directory_sources}/%.c ${path_directory_objects}
+	${cc} ${c_opts} -c $< -o $@
 
-${PATH_DIRECTORY_OBJECTS}:
-	mkdir ${PATH_DIRECTORY_OBJECTS}
+${path_directory_objects}:
+	mkdir ${path_directory_objects}
 
-${PATH_DIRECTORY_OUTPUT}:
-	mkdir ${PATH_DIRECTORY_OUTPUT}
+${path_directory_output}:
+	mkdir ${path_directory_output}
 
 clean:
-	-rm -r ${PATH_DIRECTORY_OBJECTS} 2> /dev/null
-	-rm -r ${PATH_DIRECTORY_OUTPUT} 2> /dev/null
-
+	-rm -r ${path_directory_objects} 2> /dev/null
+	-rm -r ${path_directory_output} 2> /dev/null
