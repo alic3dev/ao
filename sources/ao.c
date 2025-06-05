@@ -1,11 +1,9 @@
-#include "ao.h"
+#include <ao.h>
+#include <aio.h>
 
-#include <pthread.h>
 #include <stdio.h>
 
-#include "cer0_audio_output.h"
-
-#include "aio.h"
+#include <cer0.h>
 
 int main(
   int count_parameters,
@@ -47,10 +45,9 @@ int main(
   
   fclose(file_input);
 
-  cer0_audio_output_cleanup(
+  cer0_audio_output_destroy(
     &output_audio
   );
 
   return 0;
 }
-
