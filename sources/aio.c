@@ -1,4 +1,5 @@
 #include <aio.h>
+#include <aio_data.h>
 #include <amplitude.h>
 
 #include <stdio.h>
@@ -16,7 +17,11 @@ OSStatus aio(
 ) {
   unsigned long int count_buffer = buffer_list_audio_out->mNumberBuffers;
 
-  FILE* data_file = (FILE*) data;
+  struct aio_data* aio_data = (struct aio_data*) data;
+
+  if (aio_data->initialized == 0) {
+    return 0;
+  }
 
   for (
     unsigned long int index_buffer = 0;
@@ -29,7 +34,7 @@ OSStatus aio(
     unsigned long int size_buffer_out = audio_buffer_current.mDataByteSize / sizeof(float);
     unsigned long int count_channel_out = audio_buffer_current.mNumberChannels;
 
-    unsigned char byte;
+    float value = 0.0f;
     
     for (
       unsigned long int index_buffer_out = 0;
@@ -39,18 +44,24 @@ OSStatus aio(
       unsigned long int channel = index_buffer_out % count_channel_out;
 
       if (channel == 0) {
-        byte = getc(data_file);
+        cer0_oscillator_frequency_set(
+          &aio_data->oscillator,
+          aio_data->note_table[(
+            getc(aio_data->file_input) % aio_data->length_note_table
+          )]
+        );
+
+        value = cer0_oscillator_poll(
+          &aio_data->oscillator
+        );
       }
       
-      if (feof(data_file)) {
-        rewind(data_file);
+      if (feof(aio_data->file_input)) {
+        rewind(aio_data->file_input);
       }
 
       buffer_out[index_buffer_out] = (
-        (
-          ((float)(byte) / 127.5f)
-           - 1.0f
-        ) * amplitude
+        value * amplitude
       );
     }
   }
