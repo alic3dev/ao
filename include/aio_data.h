@@ -6,7 +6,8 @@
 struct aio_data {
   unsigned char initialized;
 
-  FILE* file_input;
+  FILE** file_inputs;
+  unsigned int length_file_inputs;
 
   float* note_table;
   unsigned int length_note_table;

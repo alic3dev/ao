@@ -22,19 +22,50 @@ int main(
   struct aio_data aio_data;
   aio_data.initialized = 0;
 
-  aio_data.file_input = fopen(
-    parameters[1],
-    "rb"
+  aio_data.length_file_inputs = (
+    count_parameters - 1
   );
 
-  if (!aio_data.file_input) {
-    fprintf(
-      stderr,
-      "unable_to_open:%s\n",
-      parameters[1]
+  aio_data.file_inputs = malloc(
+    sizeof(FILE*) * 
+    aio_data.length_file_inputs
+  );
+
+  for (
+    unsigned int index_file_input = 0;
+    index_file_input < aio_data.length_file_inputs;
+    ++index_file_input
+  ) {
+    aio_data.file_inputs[index_file_input] = fopen(
+      parameters[
+        index_file_input + 1
+      ],
+      "rb"
     );
 
-    return 2;
+    if (!aio_data.file_inputs[index_file_input]) {
+      fprintf(
+        stderr,
+        "unable_to_open:%s\n",
+        parameters[
+          index_file_input + 1
+        ]
+      );
+
+      for (
+        unsigned int index_file_input_previous = 0;
+        index_file_input_previous < index_file_input;
+        ++index_file_input_previous
+      ) {
+        fclose(
+          aio_data.file_inputs[
+            index_file_input_previous
+          ]
+        );
+      }
+
+      return 2;
+    }
   }
 
   aio_data.note_table = cer0_note_table_create(
@@ -67,8 +98,19 @@ int main(
   printf("press enter to quit:");
   getc(stdin);
   
-  fclose(aio_data.file_input);
+  for (
+    unsigned int index_file_input = 0;
+    index_file_input < aio_data.length_file_inputs;
+    ++index_file_input
+  ) {
+    fclose(
+      aio_data.file_inputs[
+        index_file_input
+       ]
+    );
+  }
 
+  free(aio_data.file_inputs);
   free(aio_data.note_table);
 
   cer0_audio_output_destroy(
