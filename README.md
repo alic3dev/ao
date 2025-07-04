@@ -4,7 +4,7 @@ send files to audio output on a loop
 
 ## usage
 
-```sh
+```
 usage: ao [?parameters] [...paths_to_file_inputs]
 parameters:
   -o, -e, --export [output_path]
