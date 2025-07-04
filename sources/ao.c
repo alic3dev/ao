@@ -47,7 +47,9 @@ int main(
       fprintf(
         stderr,
         "unable_to_open:%s\n",
-        parameters[1]
+        parameters[
+          index_file_input + 1
+        ]
       );
 
       for (
