@@ -1,4 +1,5 @@
 #include <ao.h>
+#include <ao_print_usage.h>
 #include <aio.h>
 #include <aio_data.h>
 
@@ -10,11 +11,8 @@ int main(
   int count_parameters,
   char** parameters
 ) {
-  if (count_parameters != 2) {
-    fprintf(
-      stderr,
-      "usage: ao path_file_input\n"
-    );
+  if (count_parameters < 2) {
+    ao_print_usage(1);
 
     return 1;
   }
