@@ -23,6 +23,8 @@ OSStatus aio(
     return 0;
   }
 
+  unsigned int index_file_input = 0;
+
   for (
     unsigned long int index_buffer = 0;
     index_buffer < count_buffer;
@@ -44,11 +46,17 @@ OSStatus aio(
       unsigned long int channel = index_buffer_out % count_channel_out;
 
       if (channel == 0) {
+        unsigned char byte_file_input = getc(
+          aio_data->file_inputs[index_file_input]
+        );
+
+        unsigned int index_note = byte_file_input % aio_data->length_note_table;
+
         cer0_oscillator_frequency_set(
           &aio_data->oscillator,
-          aio_data->note_table[(
-            getc(aio_data->file_input) % aio_data->length_note_table
-          )]
+          aio_data->note_table[
+            index_note
+          ]
         );
 
         value = cer0_oscillator_poll(
@@ -56,8 +64,18 @@ OSStatus aio(
         );
       }
       
-      if (feof(aio_data->file_input)) {
-        rewind(aio_data->file_input);
+      if (
+        feof(
+          aio_data->file_inputs[index_file_input]
+        )
+      ) {
+        rewind(
+          aio_data->file_inputs[index_file_input]
+        );
+
+        index_file_input = (
+          index_file_input + 1
+        ) % aio_data->length_file_inputs;
       }
 
       buffer_out[index_buffer_out] = (
