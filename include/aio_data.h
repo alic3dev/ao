@@ -1,6 +1,8 @@
 #ifndef __aio_data_h
 #define __aio_data_h
 
+#include <aio_display.h>
+
 #include <cer0.h>
 
 struct aio_data {
@@ -13,6 +15,9 @@ struct aio_data {
   unsigned int length_note_table;
 
   struct cer0_oscillator oscillator;
+
+  struct aio_display display;
+  unsigned char visualizer;
 };
 
 #endif

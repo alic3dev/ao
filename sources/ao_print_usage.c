@@ -17,6 +17,7 @@ void ao_print_usage(
     "parameters:\n"
     "  -o, -e, --export [output_path]\n"
     "    --play : plays audio while exporting (default is no audio output when exporting)\n"
+    "  -v, --visualizer : displays an audio graph of the output\n"
     "  --help : displays usage information\n"
   );
 }
