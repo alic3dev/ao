@@ -1,7 +1,9 @@
 #include <ao.h>
+#include <ao_parameters.h>
 #include <ao_print_usage.h>
 #include <aio.h>
 #include <aio_data.h>
+#include <aio_display.h>
 
 #include <cer0.h>
 
@@ -91,6 +93,12 @@ int main(
     0,
     12
   );
+
+  if (aio_data.visualizer != 0) {
+    aio_display_initialize(
+      &aio_data.display
+    );
+  }
 
   struct cer0_audio_output output_audio;
   cer0_audio_output_initialize(

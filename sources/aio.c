@@ -1,10 +1,15 @@
 #include <aio.h>
 #include <aio_data.h>
+#include <aio_display.h>
+#include <aio_frequency.h>
 #include <amplitude.h>
 
 #include <stdio.h>
 
 #include <CoreAudio/CoreAudio.h>
+
+unsigned char average = 1;
+float amplitude_display = 0.95f;
 
 OSStatus aio(
   AudioObjectID id_audio_object,
@@ -37,6 +42,9 @@ OSStatus aio(
     unsigned long int count_channel_out = audio_buffer_current.mNumberChannels;
 
     float value = 0.0f;
+    float value_average = 0.0f;
+    unsigned int length_value_average = 10;
+    unsigned int frame = 0;
     
     for (
       unsigned long int index_buffer_out = 0;
@@ -46,24 +54,54 @@ OSStatus aio(
       unsigned long int channel = index_buffer_out % count_channel_out;
 
       if (channel == 0) {
-        unsigned char byte_file_input = getc(
-          aio_data->file_inputs[index_file_input]
+        float frequency = aio_frequency_get(
+          aio_data,
+          index_file_input
         );
-
-        unsigned int index_note = byte_file_input % aio_data->length_note_table;
 
         cer0_oscillator_frequency_set(
           &aio_data->oscillator,
-          aio_data->note_table[
-            index_note
-          ]
+          frequency
         );
 
         value = cer0_oscillator_poll(
           &aio_data->oscillator
         );
+
+        if (aio_data->visualizer != 0) {
+          if (average == 0) {
+            aio_display_next(
+              &aio_data->display
+            );
+
+            aio_display_update(
+              &aio_data->display,
+              value
+            );
+          } else {
+            value_average += value;
+
+            if (++frame >= length_value_average) {
+              value_average = (
+                value_average / ((float)length_value_average)
+              );
+
+              aio_display_next(
+                &aio_data->display
+              );
+
+              aio_display_update(
+                &aio_data->display,
+                value * amplitude_display
+              );
+
+              frame = 0;
+              value_average = 0.0f;
+            }
+          }
+        }
       }
-      
+
       if (
         feof(
           aio_data->file_inputs[index_file_input]
@@ -82,6 +120,12 @@ OSStatus aio(
         value * amplitude
       );
     }
+  }
+
+  if (aio_data->visualizer != 0) {
+    aio_display_render(
+      &aio_data->display
+    );
   }
 
   return 0;
