@@ -17,11 +17,26 @@ int main(
     return 1;
   }
 
+  struct ao_parameters ao_parameters;
+
+  int index_parameters_input = ao_parameters_parse(
+    &ao_parameters,
+    count_parameters,
+    parameters
+  );
+
+  if (index_parameters_input == -1) {
+    ao_print_usage(1);
+
+    return 2;
+  }
+
   struct aio_data aio_data;
   aio_data.initialized = 0;
+  aio_data.visualizer = ao_parameters.visualizer;
 
   aio_data.length_file_inputs = (
-    count_parameters - 1
+    count_parameters - index_parameters_input
   );
 
   aio_data.file_inputs = malloc(
@@ -36,7 +51,7 @@ int main(
   ) {
     aio_data.file_inputs[index_file_input] = fopen(
       parameters[
-        index_file_input + 1
+        index_file_input + index_parameters_input
       ],
       "rb"
     );
@@ -46,7 +61,7 @@ int main(
         stderr,
         "unable_to_open:%s\n",
         parameters[
-          index_file_input + 1
+          index_file_input + index_parameters_input
         ]
       );
 

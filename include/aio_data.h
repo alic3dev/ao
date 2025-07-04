@@ -13,6 +13,7 @@ struct aio_data {
   unsigned int length_note_table;
 
   struct cer0_oscillator oscillator;
+  unsigned char visualizer;
 };
 
 #endif
