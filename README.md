@@ -5,7 +5,12 @@ send files to audio output on a loop
 ## usage
 
 ```sh
-ao [file_path]
+usage: ao [?parameters] [...paths_to_file_inputs]
+parameters:
+  -o, -e, --export [output_path]
+    --play : plays audio while exporting (default is no audio output when exporting)
+  -v, --visualizer : displays an audio graph of the output
+  --help : displays usage information
 ```
 
 ## dependencies
@@ -19,5 +24,4 @@ ao [file_path]
 make
 ```
 
-> copy_right_copy_left:alic3dev[2025]_all_rights_reserved_all_lefts_reserved
-
+> copy_right_copy_left:alic3dev[2025]\_all_rights_reserved_all_lefts_reserved
