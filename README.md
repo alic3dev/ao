@@ -15,12 +15,15 @@ parameters:
 
 ## dependencies
 
-- os
-- - mac_os: 10.5+
-- libraries
-- - [cer0](https://github.com/alic3dev/cer0)
-- - [cexil](https://github.com/alic3dev/cexil)
-- - [clic3](https://github.com/alic3dev/clic3)
+### os
+
+- mac_os: 10.5+
+
+### libraries
+
+- [cer0](https://github.com/alic3dev/cer0)
+- [cexil](https://github.com/alic3dev/cexil)
+- [clic3](https://github.com/alic3dev/clic3)
 
 ## build
 
