@@ -22,13 +22,17 @@ path_file_output=${path_directory_output}/${name}
 files_sources=${wildcard ${path_directory_sources}/*.c}
 files_objects=${patsubst ${path_directory_sources}/%.c,${path_directory_objects}/%.o,${files_sources}}
 
+cc=clang
+
 c_opts=-O3 -I${path_directory_include} -I${path_directory_cero_include} -I${path_directory_cexil_include} -I${path_directory_clice_include}
 c_opts_executable=-framework CoreAudio
 
-cc=clang
+strip=strip
+strip_flags=
 
 ${path_file_output}: ${files_objects} ${path_directory_output}
 	${cc} ${c_opts} ${c_opts_executable} ${files_objects} ${path_file_object_cero} ${path_file_object_cexil} ${path_file_object_clice} -o ${path_file_output}
+	${strip} ${strip_flags} ${path_file_output}
 
 ${path_directory_objects}/%.o: ${path_directory_sources}/%.c ${path_directory_objects}
 	${cc} ${c_opts} -c $< -o $@
