@@ -15,13 +15,26 @@ parameters:
 
 ## dependencies
 
-- macOS 10.5+
-- [cer0](https://alic3.dev/cer0)
+### os
 
-## building
+- mac_os: 10.5+
 
-```sh
+### libraries
+
+- [cer0](https://github.com/alic3dev/cer0)
+- [cexil](https://github.com/alic3dev/cexil)
+- [clic3](https://github.com/alic3dev/clic3)
+
+## build
+
+```zsh
 make
+```
+
+## clean
+
+```zsh
+make clean
 ```
 
 > copy_right_copy_left:alic3dev[2025]\_all_rights_reserved_all_lefts_reserved
