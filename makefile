@@ -1,48 +1,56 @@
 name=ao
 
-path_directory_cero=../cer0
-path_directory_cero_include=${path_directory_cero}/include
-path_directory_cero_library=${path_directory_cero}/library
-path_directory_cexil=../cexil
-path_directory_cexil_include=${path_directory_cexil}/include
-path_directory_cexil_library=${path_directory_cexil}/library
-path_directory_clice=../clic3
-path_directory_clice_include=${path_directory_clice}/include
-path_directory_clice_library=${path_directory_clice}/library
-path_directory_include=include
-path_directory_objects=objects
-path_directory_output=output
-path_directory_sources=sources
+directory_cer0=../cer0
+directory_cer0_include=${directory_cer0}/include
+directory_cer0_library=${directory_cer0}/library
 
-path_file_object_cero=${path_directory_cero_library}/cer0.o
-path_file_object_cexil=${path_directory_cexil_library}/cexil.o
-path_file_object_clice=${path_directory_clice_library}/clic3.o
-path_file_output=${path_directory_output}/${name}
+directory_cexil=../cexil
+directory_cexil_include=${directory_cexil}/include
+directory_cexil_library=${directory_cexil}/library
 
-files_sources=${wildcard ${path_directory_sources}/*.c}
-files_objects=${patsubst ${path_directory_sources}/%.c,${path_directory_objects}/%.o,${files_sources}}
+directory_clic3=../clic3
+directory_clic3_include=${directory_clic3}/include
+directory_clic3_library=${directory_clic3}/library
+
+directory_include=include
+directory_objects=objects
+directory_output=output
+directory_sources=sources
+
+file_object_cer0=${directory_cer0_library}/cer0.o
+file_object_cexil=${directory_cexil_library}/cexil.o
+file_object_clic3=${directory_clic3_library}/clic3.o
+
+file_output=${directory_output}/${name}
+
+files_sources=${wildcard ${directory_sources}/*.c}
+files_objects=${patsubst ${directory_sources}/%.c,${directory_objects}/%.o,${files_sources}}
 
 cc=clang
 
-c_opts=-O3 -I${path_directory_include} -I${path_directory_cero_include} -I${path_directory_cexil_include} -I${path_directory_clice_include}
-c_opts_executable=-framework CoreAudio
+c_flags=-O3 -I${directory_include} -I${directory_cer0_include} -I${directory_cexil_include} -I${directory_clic3_include}
+c_flags_executable=-framework CoreAudio
 
 strip=strip
 strip_flags=
 
-${path_file_output}: ${files_objects} ${path_directory_output}
-	${cc} ${c_opts} ${c_opts_executable} ${files_objects} ${path_file_object_cero} ${path_file_object_cexil} ${path_file_object_clice} -o ${path_file_output}
-	${strip} ${strip_flags} ${path_file_output}
+${file_output}: ${files_objects} ${directory_output}
+	${cc} ${c_flags} ${c_flags_executable} ${files_objects} ${file_object_cer0} ${file_object_cexil} ${file_object_clic3} -o ${file_output}
+	${strip} ${strip_flags} ${file_output}
 
-${path_directory_objects}/%.o: ${path_directory_sources}/%.c ${path_directory_objects}
-	${cc} ${c_opts} -c $< -o $@
+${directory_objects}/%.o: ${directory_sources}/%.c ${directory_objects}
+	${cc} ${c_flags} -c $< -o $@
 
-${path_directory_objects}:
-	mkdir ${path_directory_objects}
+${directory_objects}:
+	mkdir ${directory_objects}
 
-${path_directory_output}:
-	mkdir ${path_directory_output}
+${directory_output}:
+	mkdir ${directory_output}
 
-clean:
-	-rm -r ${path_directory_objects} 2> /dev/null
-	-rm -r ${path_directory_output} 2> /dev/null
+clean: clean_objects clean_output
+
+clean_objects:
+	-rm -r ${directory_objects} 2> /dev/null
+
+clean_output:
+	-rm -r ${directory_output} 2> /dev/null
