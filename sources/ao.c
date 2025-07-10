@@ -164,6 +164,15 @@ int main(
     &mutex_exporting
   );
 
+  if (
+    aio_data.mode == export_play ||
+    aio_data.mode == play
+  ) {
+    cer0_audio_output_destroy(
+      &output_audio
+    );
+  }
+
   for (
     unsigned int index_file_input = 0;
     index_file_input < aio_data.length_file_inputs;
@@ -179,14 +188,9 @@ int main(
   free(aio_data.file_inputs);
   free(aio_data.note_table);
 
-  if (
-    aio_data.mode == export_play ||
-    aio_data.mode == play
-  ) {
-    cer0_audio_output_destroy(
-      &output_audio
-    );
-  }
+  aio_display_destroy(
+    &aio_data.display
+  );
 
   return 0;
 }

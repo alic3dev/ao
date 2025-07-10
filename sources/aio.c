@@ -42,7 +42,7 @@ OSStatus aio(
   ) {
     AudioBuffer audio_buffer_current = buffer_list_audio_out->mBuffers[index_buffer];
 
-    float *buffer_out = audio_buffer_current.mData;
+    float* buffer_out = audio_buffer_current.mData;
     unsigned long int size_buffer_out = audio_buffer_current.mDataByteSize / sizeof(float);
     unsigned long int count_channel_out = audio_buffer_current.mNumberChannels;
 
@@ -137,11 +137,19 @@ OSStatus aio(
           index_file_input == 0 &&
           aio_data->mode == export_play
         ) {
+          if (aio_data->visualizer != 0) {
+            aio_display_render(
+              &aio_data->display
+            );
+          }
+
           aio_data->exporting = 0;
 
           pthread_mutex_unlock(
             &mutex_exporting
           );
+
+          return 0;
         }
       } 
     }
