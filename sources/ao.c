@@ -1,6 +1,7 @@
 #include <ao.h>
 #include <ao_parameters.h>
 #include <ao_print_usage.h>
+#include <aio_export.h>
 #include <aio.h>
 #include <aio_data.h>
 #include <aio_display.h>
@@ -32,9 +33,26 @@ int main(
 
     return 2;
   }
-
+  
   struct aio_data aio_data;
   aio_data.initialized = 0;
+
+  aio_data.mode = ao_parameters.export == 1 ? (
+    ao_parameters.play == 1 ? export_play : export
+  ) : play;
+  
+  if (
+    aio_data.mode == export ||
+    aio_data.mode == export_play
+  ) {
+    aio_data.file_output = fopen(
+      ao_parameters.path_export,
+      "wb"
+    );
+
+    aio_data.exporting = 1;
+  }
+
   aio_data.visualizer = ao_parameters.visualizer;
 
   aio_data.length_file_inputs = (
@@ -42,7 +60,7 @@ int main(
   );
 
   aio_data.file_inputs = malloc(
-    sizeof(FILE*) * 
+    sizeof(FILE*) *
     aio_data.length_file_inputs
   );
 
@@ -94,31 +112,58 @@ int main(
     12
   );
 
-  if (aio_data.visualizer != 0) {
-    aio_display_initialize(
-      &aio_data.display
+  struct cer0_audio_output output_audio;
+
+  pthread_mutex_init(
+    &mutex_exporting,
+    (void*)0
+  );
+
+  pthread_mutex_init(
+    &mutex_export_write,
+    (void*)0
+  );
+
+  if (
+    aio_data.mode == export_play ||
+    aio_data.mode == play
+  ) {
+    if (aio_data.visualizer != 0) {
+      aio_display_initialize(
+        &aio_data.display
+      );
+    }
+
+    pthread_mutex_lock(
+      &mutex_exporting
+    );
+
+    cer0_audio_output_initialize(
+      &output_audio,
+      aio,
+      &aio_data
+    );
+
+    cer0_oscillator_initialize(
+      &aio_data.oscillator,
+      output_audio.sample_rate,
+      0.0f,
+      sine
+    );
+
+    aio_data.initialized = 1;
+  } else if (
+    aio_data.mode == export
+  ) {
+    aio_export_data(
+      &aio_data
     );
   }
 
-  struct cer0_audio_output output_audio;
-  cer0_audio_output_initialize(
-    &output_audio,
-    aio,
-    &aio_data
+  pthread_mutex_lock(
+    &mutex_exporting
   );
 
-  cer0_oscillator_initialize(
-    &aio_data.oscillator,
-    output_audio.sample_rate,
-    0.0f,
-    sine
-  );
-
-  aio_data.initialized = 1;
-
-  printf("press enter to quit:");
-  getc(stdin);
-  
   for (
     unsigned int index_file_input = 0;
     index_file_input < aio_data.length_file_inputs;
@@ -127,16 +172,21 @@ int main(
     fclose(
       aio_data.file_inputs[
         index_file_input
-       ]
+      ]
     );
   }
 
   free(aio_data.file_inputs);
   free(aio_data.note_table);
 
-  cer0_audio_output_destroy(
-    &output_audio
-  );
+  if (
+    aio_data.mode == export_play ||
+    aio_data.mode == play
+  ) {
+    cer0_audio_output_destroy(
+      &output_audio
+    );
+  }
 
   return 0;
 }

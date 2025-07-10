@@ -1,9 +1,11 @@
 #include <aio.h>
 #include <aio_data.h>
 #include <aio_display.h>
+#include <aio_export.h>
 #include <aio_frequency.h>
 #include <amplitude.h>
 
+#include <pthread.h>
 #include <stdio.h>
 
 #include <CoreAudio/CoreAudio.h>
@@ -24,7 +26,10 @@ OSStatus aio(
 
   struct aio_data* aio_data = (struct aio_data*) data;
 
-  if (aio_data->initialized == 0) {
+  if (
+    aio_data->initialized == 0 ||
+    (aio_data->mode == export_play && aio_data->exporting == 0)
+  ) {
     return 0;
   }
 
@@ -102,6 +107,19 @@ OSStatus aio(
         }
       }
 
+      float value_output = value * amplitude;
+
+      buffer_out[index_buffer_out] = (
+        value_output
+      );
+
+      if (aio_data->mode == export_play) {
+        aio_export_write(
+          aio_data->file_output,
+          value_output
+        );
+      }
+ 
       if (
         feof(
           aio_data->file_inputs[index_file_input]
@@ -114,11 +132,18 @@ OSStatus aio(
         index_file_input = (
           index_file_input + 1
         ) % aio_data->length_file_inputs;
-      }
 
-      buffer_out[index_buffer_out] = (
-        value * amplitude
-      );
+        if (
+          index_file_input == 0 &&
+          aio_data->mode == export_play
+        ) {
+          aio_data->exporting = 0;
+
+          pthread_mutex_unlock(
+            &mutex_exporting
+          );
+        }
+      } 
     }
   }
 

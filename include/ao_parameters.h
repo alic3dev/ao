@@ -3,6 +3,7 @@
 
 struct ao_parameters {
   unsigned char export;
+  unsigned char play;
   char* path_export;
   unsigned char visualizer;
 };

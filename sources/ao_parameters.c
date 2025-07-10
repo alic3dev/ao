@@ -8,6 +8,7 @@ int ao_parameters_parse(
   char** parameters
 ) {
   ao_parameters->export = 0;
+  ao_parameters->play = 0;
   ao_parameters->path_export = (void*)0;
   ao_parameters->visualizer = 0;
 
@@ -38,6 +39,14 @@ int ao_parameters_parse(
       }
 
       ao_parameters->path_export = parameters[index_parameter];
+    } else if (
+      clic3_char_arrays_within(
+        parameters[index_parameter],
+        1,
+        "--play"
+      ) != -1
+    ) {
+      ao_parameters->play = 1;
     } else if (
       clic3_char_arrays_within(
         parameters[index_parameter],
