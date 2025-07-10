@@ -137,13 +137,19 @@ OSStatus aio(
           index_file_input == 0 &&
           aio_data->mode == export_play
         ) {
+          if (aio_data->visualizer != 0) {
+            aio_display_render(
+              &aio_data->display
+            );
+          }
+
           aio_data->exporting = 0;
 
           pthread_mutex_unlock(
             &mutex_exporting
           );
 
-          break;
+          return 0;
         }
       } 
     }
