@@ -24,7 +24,7 @@ void aio_display_next(
 ) {
   for (
     unsigned int index_y = 0;
-    index_y < aio_display->renderer.size.height;
+    index_y < aio_display->renderer.size.height - 1;
     ++index_y
   ) {
     for (
@@ -47,8 +47,8 @@ void aio_display_update(
 ) {
   unsigned int index_y = (
     (((int)(
-      (((float)aio_display->renderer.size.height) * frequency) / 2.0f
-    )) + (aio_display->renderer.size.height / 2)) % aio_display->renderer.size.height
+      (((float)aio_display->renderer.size.height - 1) * frequency) / 2.0f
+    )) + ((aio_display->renderer.size.height - 1) / 2)) % (aio_display->renderer.size.height - 1)
   );
 
   unsigned int index_x = (
@@ -110,3 +110,10 @@ void aio_display_render(
   );
 }
 
+void aio_display_destroy(
+  struct aio_display* aio_display
+) {
+  cexil_renderer_destroy(
+    &aio_display->renderer
+  );
+}

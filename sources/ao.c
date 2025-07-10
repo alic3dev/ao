@@ -188,5 +188,9 @@ int main(
   free(aio_data.file_inputs);
   free(aio_data.note_table);
 
+  aio_display_destroy(
+    &aio_data.display
+  );
+
   return 0;
 }

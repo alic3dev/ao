@@ -25,4 +25,8 @@ void aio_display_render(
   struct aio_display*
 );
 
+void aio_display_destroy(
+  struct aio_display*
+);
+
 #endif
