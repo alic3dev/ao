@@ -10,9 +10,6 @@
 
 #include <CoreAudio/CoreAudio.h>
 
-unsigned char average = 1;
-float amplitude_display = 0.95f;
-
 OSStatus aio(
   AudioObjectID id_audio_object,
   const AudioTimeStamp* timestamp_audio,
@@ -45,9 +42,9 @@ OSStatus aio(
     float* buffer_out = audio_buffer_current.mData;
     unsigned long int size_buffer_out = audio_buffer_current.mDataByteSize / sizeof(float);
     unsigned long int count_channel_out = audio_buffer_current.mNumberChannels;
-
-    float value = 0.0f;
+    
     float value_average = 0.0f;
+    float value_output = 0.0f;
     unsigned int length_value_average = 10;
     unsigned int frame = 0;
     
@@ -59,36 +56,66 @@ OSStatus aio(
       unsigned long int channel = index_buffer_out % count_channel_out;
 
       if (channel == 0) {
-        float frequency = aio_frequency_get(
-          aio_data,
-          index_file_input
-        );
+        if (
+          aio_data->index_output % aio_data->speed == 0
+        ) {
+          aio_data->index_output = 1;
 
-        cer0_oscillator_frequency_set(
-          &aio_data->oscillator,
-          frequency
-        );
+          aio_frequency_get(
+            aio_data,
+            index_file_input
+          );
 
-        value = cer0_oscillator_poll(
-          &aio_data->oscillator
+          cer0_oscillator_frequency_set(
+            &aio_data->oscillator,
+            aio_data->frequency
+          );
+
+          if (
+            aio_data->synced_oscillator == 1
+          ) {
+            aio_data->value = cer0_oscillator_poll(
+              &aio_data->oscillator
+            );
+          }
+        } else {
+          aio_data->index_output = (
+            aio_data->index_output + 1
+          );
+        }
+
+        if (
+          aio_data->synced_oscillator != 1
+        ) {
+          aio_data->value = cer0_oscillator_poll(
+            &aio_data->oscillator
+          );
+        }
+
+        value_output = (
+          (aio_data->block == 1)
+          ? ((aio_data->value * amplitude) > 0.0f ? 1.0f : -1.0f)
+          : aio_data->value * amplitude
         );
 
         if (aio_data->visualizer != 0) {
-          if (average == 0) {
+          if (
+            aio_data->visualizer_average == 0
+          ) {
             aio_display_next(
               &aio_data->display
             );
 
             aio_display_update(
               &aio_data->display,
-              value
+              value_output
             );
           } else {
-            value_average += value;
+            value_average += value_output;
 
             if (++frame >= length_value_average) {
               value_average = (
-                value_average / ((float)length_value_average)
+                value_average / ((float) length_value_average)
               );
 
               aio_display_next(
@@ -97,7 +124,7 @@ OSStatus aio(
 
               aio_display_update(
                 &aio_data->display,
-                value * amplitude_display
+                value_output
               );
 
               frame = 0;
@@ -107,8 +134,7 @@ OSStatus aio(
         }
       }
 
-      float value_output = value * amplitude;
-
+      
       buffer_out[index_buffer_out] = (
         value_output
       );
@@ -151,7 +177,7 @@ OSStatus aio(
 
           return 0;
         }
-      } 
+      }
     }
   }
 
