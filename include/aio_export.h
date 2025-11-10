@@ -7,7 +7,6 @@
 #include <stdio.h>
 
 pthread_mutex_t mutex_exporting;
-pthread_mutex_t mutex_export_write;
 
 int aio_export_write(
   FILE*,

@@ -24,8 +24,10 @@ OSStatus aio(
   struct aio_data* aio_data = (struct aio_data*) data;
 
   if (
-    aio_data->initialized == 0 ||
-    (aio_data->mode == export_play && aio_data->exporting == 0)
+    aio_data->initialized == 0 || (
+      aio_data->mode == export_play &&
+      aio_data->exporting == 0
+    )
   ) {
     return 0;
   }
@@ -57,7 +59,7 @@ OSStatus aio(
 
       if (channel == 0) {
         if (
-          aio_data->index_output % aio_data->speed == 0
+          (aio_data->index_output % aio_data->speed) == 0
         ) {
           aio_data->index_output = 1;
 
@@ -134,12 +136,14 @@ OSStatus aio(
         }
       }
 
-      
       buffer_out[index_buffer_out] = (
         value_output
       );
 
-      if (aio_data->mode == export_play) {
+      if (
+        aio_data->mode == export_play &&
+        aio_data->exporting != 0
+      ) {
         aio_export_write(
           aio_data->file_output,
           value_output
