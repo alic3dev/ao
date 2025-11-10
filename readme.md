@@ -9,7 +9,11 @@ usage: ao [?parameters] [...paths_to_file_inputs]
 parameters:
   -o, -e, --export [output_path]
     --play : plays audio while exporting (default is no audio output when exporting)
+  -b, --block : ceils and floors to maximum and minimum values
+  -s, --speed [#1+] : the speed of file playback
+  -x, --synchronize-oscillator : synchronizes oscillators to the speed value
   -v, --visualizer : displays an audio graph of the output
+  -a, --visualize-average : averages the display output
   --help : displays usage information
 ```
 
