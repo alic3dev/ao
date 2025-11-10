@@ -23,12 +23,21 @@ struct aio_data {
   float* note_table;
   unsigned int length_note_table;
 
+  float frequency;
+  float value;
+
   struct cer0_oscillator oscillator;
 
   enum mode_aio_data mode;
 
   struct aio_display display;
+
+  unsigned long int index_output;
+  unsigned char block;
+  unsigned long int speed;
+  unsigned char synced_oscillator;
   unsigned char visualizer;
+  unsigned char visualizer_average;
 };
 
 #endif

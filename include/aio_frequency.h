@@ -3,7 +3,7 @@
 
 #include <aio_data.h>
 
-float aio_frequency_get(
+void aio_frequency_get(
   struct aio_data*,
   unsigned int
 );

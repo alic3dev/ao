@@ -1,7 +1,7 @@
 #include <aio_frequency.h>
 #include <aio_data.h>
 
-float aio_frequency_get(
+void aio_frequency_get(
   struct aio_data* aio_data,
   unsigned int index_file_input
 ) {
@@ -13,7 +13,7 @@ float aio_frequency_get(
     byte_file_input % aio_data->length_note_table
   );
 
-  return aio_data->note_table[
+  aio_data->frequency = aio_data->note_table[
     index_note
   ];
 }

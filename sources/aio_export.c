@@ -38,14 +38,14 @@ void aio_export_data(
     ++index_file_input
   ) {
     do {
-      float frequency = aio_frequency_get(
+      aio_frequency_get(
         aio_data,
         index_file_input
       );
 
       int status_write = aio_export_write(
         aio_data->file_output,
-        frequency
+        aio_data->frequency
       );
 
       if (status_write < 0) {
