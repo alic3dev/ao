@@ -3,7 +3,7 @@ on:
   push:
     branches: ["core"]
   pull_request:
-    branches: ["core"]
+    branches: ["*"]
 jobs:
   continuous_integration_build:
     runs-on: macos-latest
@@ -27,11 +27,11 @@ jobs:
         with:
           repository: alic3dev/clic3
           path: clic3
+      - name: make_clic3
+        run: cd clic3 && make library/clic3.o
       - name: make_cer0
         run: cd cer0 && make cer0
       - name: make_cexil
         run: cd cexil && make library/cexil.o
-      - name: make_clic3
-        run: cd clic3 && make library/clic3.o
       - name: make_ao
         run: cd ao && make
