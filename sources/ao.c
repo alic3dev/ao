@@ -53,7 +53,11 @@ int main(
     aio_data.exporting = 1;
   }
 
+  aio_data.block = ao_parameters.block;
+  aio_data.speed = ao_parameters.speed;
+  aio_data.synced_oscillator = ao_parameters.synced_oscillator;
   aio_data.visualizer = ao_parameters.visualizer;
+  aio_data.visualizer_average = ao_parameters.visualizer_average;
 
   aio_data.length_file_inputs = (
     count_parameters - index_parameters_input
@@ -116,11 +120,6 @@ int main(
 
   pthread_mutex_init(
     &mutex_exporting,
-    (void*)0
-  );
-
-  pthread_mutex_init(
-    &mutex_export_write,
     (void*)0
   );
 
