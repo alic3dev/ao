@@ -124,16 +124,16 @@ int main(
     (void*)0
   );
 
+  if (aio_data.visualizer != 0) {
+    aio_display_initialize(
+      &aio_data.display
+    );
+  }
+
   if (
     aio_data.mode == export_play ||
     aio_data.mode == play
   ) {
-    if (aio_data.visualizer != 0) {
-      aio_display_initialize(
-        &aio_data.display
-      );
-    }
-
     pthread_mutex_lock(
       &mutex_exporting
     );
@@ -188,9 +188,11 @@ int main(
   free(aio_data.file_inputs);
   free(aio_data.note_table);
 
-  aio_display_destroy(
-    &aio_data.display
-  );
+  if (aio_data.visualizer != 0) {
+    aio_display_destroy(
+      &aio_data.display
+    );
+  }
 
   return 0;
 }
