@@ -8,18 +8,10 @@ int aio_export_write(
   FILE* file_export,
   float frequency
 ) {
-  pthread_mutex_lock(
-    &mutex_export_write
-  );
-  
   signed int status_write = fprintf(
     file_export,
     "%f,",
     frequency
-  );
-
-  pthread_mutex_unlock(
-    &mutex_export_write
   );
 
   return status_write;

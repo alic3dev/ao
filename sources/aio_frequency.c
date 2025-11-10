@@ -17,4 +17,3 @@ void aio_frequency_get(
     index_note
   ];
 }
-
