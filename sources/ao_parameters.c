@@ -19,7 +19,7 @@ int ao_parameters_parse(
 
   for (
     unsigned int index_parameter = 1;
-    index_parameter < length_parameters;
+    index_parameter < length_parameters - 1;
     ++index_parameter
   ) {
     int index_parameter_valid = clic3_char_arrays_within(
@@ -49,7 +49,8 @@ int ao_parameters_parse(
       return index_parameter;
     } else if (
       index_parameter_valid >= 0 &&
-      index_parameter_valid <= 2
+      index_parameter_valid <= 2 &&
+      index_parameter < length_parameters - 1
     ) {
       ao_parameters->export = 1;
 
@@ -57,13 +58,11 @@ int ao_parameters_parse(
         index_parameter + 1
       );
 
-      if (
-        index_parameter >= length_parameters
-      ) {
-        return -2 - index_parameter;
-      }
-
-      ao_parameters->path_export = parameters[index_parameter];
+      ao_parameters->path_export = (
+        parameters[
+          index_parameter
+        ]
+      );
     } else if (
       index_parameter_valid == 3
     ) {
@@ -76,17 +75,11 @@ int ao_parameters_parse(
     } else if (
       index_parameter_valid >= 6 &&
       index_parameter_valid <= 7 &&
-      index_parameter < (length_parameters - 1)
+      index_parameter < length_parameters - 1
     ) {
       index_parameter = (
         index_parameter + 1
       );
-
-      if (
-        index_parameter >= length_parameters
-      ) {
-        return -2 - index_parameter;
-      }
 
       unsigned char status = clic3_char_array_to_unsigned_long_int(
         parameters[
@@ -128,5 +121,8 @@ int ao_parameters_parse(
     }
   }
 
-  return -1;
+  return (
+    length_parameters -
+    1
+  );
 }

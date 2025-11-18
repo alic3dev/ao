@@ -14,6 +14,19 @@ int main(
   int length_parameters,
   char** parameters
 ) {
+  if (
+    length_parameters < 2
+  ) {
+    fprintf(
+      stderr,
+      "must_provide_path_to_input_files_as_last_parameters\n"
+    );
+
+    ao_print_usage(1);
+
+    return 1;
+  }
+
   struct ao_parameters ao_parameters;
 
   int index_parameters_input = ao_parameters_parse(
@@ -31,71 +44,30 @@ int main(
   }
 
   if (
-    index_parameters_input < 0 ||
     index_parameters_input >= length_parameters
-  ) {
-    int code_status_exit_error = 1;
-
-    if (
-      index_parameters_input == -1
-    ) {
-      fprintf(
-        stderr,
-        "must_provide_path_to_input_file_as_last_parameter\n"
-      );
-    } else if (
-      index_parameters_input >= length_parameters
-    ) {
-      fprintf(
-        stderr,
-        "invalid_value->{%s}.provided_for_parameter->{%s};\n",
-        parameters[
-          index_parameters_input -
-          length_parameters +
-          1
-        ],
-        parameters[
-          index_parameters_input -
-          length_parameters
-        ]
-      );
-
-      code_status_exit_error = 2;
-    } else {
-      fprintf(
-        stderr,
-        "unknown_parameter->{%s}\n",
-        parameters[
-          -(index_parameters_input + 2)
-        ]
-      );
-
-      code_status_exit_error = 3;
-    }
-
-    ao_print_usage(1);
-
-    return code_status_exit_error;
-  }
-
-  if (
-    index_parameters_input != length_parameters - 1
   ) {
     fprintf(
       stderr,
-      "unknown_parameter->{%s};\n",
+      "invalid_value->{%s}.provided_for_parameter->{%s};\n",
       parameters[
-        index_parameters_input
+        index_parameters_input -
+        length_parameters +
+        1
+      ],
+      parameters[
+        index_parameters_input -
+        length_parameters
       ]
     );
 
     ao_print_usage(1);
 
-    return 3;
+    return 2;
   }
 
   struct aio_data aio_data;
   aio_data.initialized = 0;
+  aio_data.index_file_input = 0;
 
   aio_data.mode = ao_parameters.export == 1 ? (
     ao_parameters.play == 1 ? export_play : export
@@ -114,6 +86,7 @@ int main(
   }
 
   aio_data.block = ao_parameters.block;
+  aio_data.path_export = ao_parameters.path_export;
   aio_data.speed = ao_parameters.speed;
   aio_data.synced_oscillator = ao_parameters.synced_oscillator;
   aio_data.visualizer = ao_parameters.visualizer;

@@ -21,7 +21,7 @@ OSStatus aio(
 ) {
   unsigned long int count_buffer = buffer_list_audio_out->mNumberBuffers;
 
-  struct aio_data* aio_data = (struct aio_data*) data;
+  struct aio_data* aio_data = data;
 
   if (
     aio_data->initialized == 0 || (
@@ -32,8 +32,6 @@ OSStatus aio(
     return 0;
   }
 
-  unsigned int index_file_input = 0;
-
   for (
     unsigned long int index_buffer = 0;
     index_buffer < count_buffer;
@@ -42,7 +40,12 @@ OSStatus aio(
     AudioBuffer audio_buffer_current = buffer_list_audio_out->mBuffers[index_buffer];
 
     float* buffer_out = audio_buffer_current.mData;
-    unsigned long int size_buffer_out = audio_buffer_current.mDataByteSize / sizeof(float);
+
+    unsigned long int size_buffer_out = (
+      audio_buffer_current.mDataByteSize /
+      sizeof(float)
+    );
+
     unsigned long int count_channel_out = audio_buffer_current.mNumberChannels;
     
     float value_average = 0.0f;
@@ -64,8 +67,7 @@ OSStatus aio(
           aio_data->index_output = 1;
 
           aio_frequency_get(
-            aio_data,
-            index_file_input
+            aio_data
           );
 
           cer0_oscillator_frequency_set(
@@ -152,19 +154,23 @@ OSStatus aio(
  
       if (
         feof(
-          aio_data->file_inputs[index_file_input]
+          aio_data->file_inputs[
+            aio_data->index_file_input
+          ]
         )
       ) {
         rewind(
-          aio_data->file_inputs[index_file_input]
+          aio_data->file_inputs[
+            aio_data->index_file_input
+          ]
         );
 
-        index_file_input = (
-          index_file_input + 1
+        aio_data->index_file_input = (
+          aio_data->index_file_input + 1
         ) % aio_data->length_file_inputs;
 
         if (
-          index_file_input == 0 &&
+          aio_data->index_file_input == 0 &&
           aio_data->mode == export_play
         ) {
           if (aio_data->visualizer != 0) {

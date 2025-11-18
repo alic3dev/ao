@@ -16,8 +16,10 @@ struct aio_data {
 
   FILE** file_inputs;
   unsigned int length_file_inputs;
+  unsigned int index_file_input;
 
   unsigned char exporting;
+  char* path_export;
   FILE* file_output;
 
   float* note_table;
