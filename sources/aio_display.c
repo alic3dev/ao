@@ -35,7 +35,7 @@ void aio_display_next(
       aio_display->renderer.pixels[index_y][index_x] = (
         aio_display->renderer.pixels[index_y][index_x + 1]
       );
-      
+
       aio_display->renderer.pixels[index_y][index_x + 1] = 0;
     }
   }
