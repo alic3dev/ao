@@ -4,8 +4,7 @@
 #include <aio_data.h>
 
 void aio_frequency_get(
-  struct aio_data*,
-  unsigned int
+  struct aio_data*
 );
 
 #endif

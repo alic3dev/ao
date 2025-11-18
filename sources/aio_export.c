@@ -24,15 +24,19 @@ void aio_export_data(
     &mutex_exporting
   );
 
-  for (
-    unsigned int index_file_input = 0;
-    index_file_input < aio_data->length_file_inputs;
-    ++index_file_input
+  while (
+    aio_data->index_file_input <
+    aio_data->length_file_inputs
   ) {
-    do {
+    while(
+      !feof(
+        aio_data->file_inputs[
+          aio_data->index_file_input
+        ]
+      )
+    ) {
       aio_frequency_get(
-        aio_data,
-        index_file_input
+        aio_data
       );
 
       int status_write = aio_export_write(
@@ -40,21 +44,25 @@ void aio_export_data(
         aio_data->frequency
       );
 
-      if (status_write < 0) {
+      if (
+        status_write < 0
+      ) {
         fprintf(
           stderr,
           "error_writing_to_output_file->{%s};\n",
           aio_data->path_export
         );
 
-        index_file_input = aio_data->length_file_inputs;
+        aio_data->index_file_input = (
+          aio_data->length_file_inputs - 1
+        );
 
         break;
       }
-    } while(
-      !feof(
-        aio_data->file_inputs[index_file_input]
-      )
+    }
+
+    aio_data->index_file_input = (
+      aio_data->index_file_input + 1
     );
   }
 

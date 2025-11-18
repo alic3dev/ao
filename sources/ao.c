@@ -96,6 +96,7 @@ int main(
 
   struct aio_data aio_data;
   aio_data.initialized = 0;
+  aio_data.index_file_input = 0;
 
   aio_data.mode = ao_parameters.export == 1 ? (
     ao_parameters.play == 1 ? export_play : export
