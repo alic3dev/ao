@@ -43,7 +43,8 @@ void aio_export_data(
       if (status_write < 0) {
         fprintf(
           stderr,
-          "error_writing\n"
+          "error_writing_to_output_file->{%s};\n",
+          aio_data->path_export
         );
 
         index_file_input = aio_data->length_file_inputs;

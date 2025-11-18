@@ -114,6 +114,7 @@ int main(
   }
 
   aio_data.block = ao_parameters.block;
+  aio_data.path_export = ao_parameters.path_export;
   aio_data.speed = ao_parameters.speed;
   aio_data.synced_oscillator = ao_parameters.synced_oscillator;
   aio_data.visualizer = ao_parameters.visualizer;
