@@ -17,6 +17,20 @@ int ao_parameters_parse(
   ao_parameters->visualizer = 0;
   ao_parameters->visualizer_average = 0;
 
+  if (
+    length_parameters == 2 &&
+    clic3_char_arrays_within(
+      parameters[1],
+      2,
+      "-h",
+      "--help"
+    ) != -1
+  ) {
+    ao_parameters->help = 1;
+
+    return 0;
+  }
+
   for (
     unsigned int index_parameter = 1;
     index_parameter < length_parameters - 1;
