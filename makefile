@@ -34,18 +34,14 @@ c_flags_executable=-framework CoreAudio
 strip=strip
 strip_flags=
 
-${file_output}: ${files_objects} ${directory_output}
+${file_output}: ${files_objects}
+	mkdir -p ${directory_output}
 	${cc} ${c_flags} ${c_flags_executable} ${files_objects} ${file_object_cer0} ${file_object_cexil} ${file_object_clic3} -o ${file_output}
 	${strip} ${strip_flags} ${file_output}
 
-${directory_objects}/%.o: ${directory_sources}/%.c ${directory_objects}
+${directory_objects}/%.o: ${directory_sources}/%.c
+	mkdir -p ${directory_objects}
 	${cc} ${c_flags} -c $< -o $@
-
-${directory_objects}:
-	mkdir ${directory_objects}
-
-${directory_output}:
-	mkdir ${directory_output}
 
 clean: clean_objects clean_output
 
