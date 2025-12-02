@@ -2,7 +2,7 @@ name=ao
 
 directory_cer0=../cer0
 directory_cer0_include=${directory_cer0}/include
-directory_cer0_library=${directory_cer0}/library
+directory_cer0_library=${directory_cer0}/library/macos/release
 
 directory_cexil=../cexil
 directory_cexil_include=${directory_cexil}/include
@@ -10,25 +10,33 @@ directory_cexil_library=${directory_cexil}/library
 
 directory_clic3=../clic3
 directory_clic3_include=${directory_clic3}/include
-directory_clic3_library=${directory_clic3}/library
+directory_clic3_library=${directory_clic3}/library/macos/release
 
 directory_include=include
 directory_objects=objects
 directory_output=output
 directory_sources=sources
 
-file_object_cer0=${directory_cer0_library}/cer0.o
+file_object_cer0=${directory_cer0_library}/cer0.dylib
 file_object_cexil=${directory_cexil_library}/cexil.o
-file_object_clic3=${directory_clic3_library}/clic3.o
+file_object_clic3=${directory_clic3_library}/clic3.dylib
 
 file_output=${directory_output}/${name}
 
 files_sources=${wildcard ${directory_sources}/*.c}
 files_objects=${patsubst ${directory_sources}/%.c,${directory_objects}/%.o,${files_sources}}
 
-cc=clang
+ifndef target_device_version
+	target_device_version=26.1
+endif
 
-c_flags=-O3 -I${directory_include} -I${directory_cer0_include} -I${directory_cexil_include} -I${directory_clic3_include}
+target_platform=arm64-apple-macos${target_device_version}
+
+directory_sdk=${shell xcrun --sdk macosx${target_device_version} --show-sdk-path}
+
+cc=clang
+c_flags_platform=-target ${target_platform} -isysroot ${directory_sdk}
+c_flags=-O3 ${c_flags_platform} -I${directory_include} -I${directory_cer0_include} -I${directory_cexil_include} -I${directory_clic3_include}
 c_flags_executable=-framework CoreAudio
 
 strip=strip
