@@ -5,6 +5,8 @@
 
 #include <cer0.h>
 
+#include <stdio.h>
+
 enum mode_aio_data {
   play,
   export,
