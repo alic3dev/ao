@@ -6,7 +6,7 @@ directory_cer0_library=${directory_cer0}/library/macos/release
 
 directory_cexil=../cexil
 directory_cexil_include=${directory_cexil}/include
-directory_cexil_library=${directory_cexil}/library
+directory_cexil_library=${directory_cexil}/library/macos/release
 
 directory_clic3=../clic3
 directory_clic3_include=${directory_clic3}/include
