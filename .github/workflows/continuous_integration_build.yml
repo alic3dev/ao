@@ -17,6 +17,11 @@ jobs:
         with:
           repository: alic3dev/ao
           path: ao
+      - name: checkout_math_c
+        uses: actions/checkout@v5
+        with:
+          repository: alic3dev/math_c
+          path: math_c
       - name: checkout_cer0
         uses: actions/checkout@v5
         with:
@@ -34,6 +39,8 @@ jobs:
           path: clic3
       - name: make_clic3
         run: cd clic3 && make target_device_version=${{ env.target_device_version_macos }}
+      - name: make_math_c
+        run: cd math_c && make target_device_version=${{ env.target_device_version_macos }}
       - name: make_cer0
         run: cd cer0 && make target_device_version=${{ env.target_device_version_macos }}
       - name: make_cexil

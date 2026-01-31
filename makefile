@@ -6,11 +6,15 @@ directory_cer0_library=${directory_cer0}/library/macos/release
 
 directory_cexil=../cexil
 directory_cexil_include=${directory_cexil}/include
-directory_cexil_library=${directory_cexil}/library
+directory_cexil_library=${directory_cexil}/library/macos/release
 
 directory_clic3=../clic3
 directory_clic3_include=${directory_clic3}/include
 directory_clic3_library=${directory_clic3}/library/macos/release
+
+directory_math_c=../math_c
+directory_math_c_include=${directory_math_c}/include
+directory_math_c_library=${directory_math_c}/library/macos/release
 
 directory_include=include
 directory_objects=objects
@@ -36,7 +40,7 @@ directory_sdk=${shell xcrun --sdk macosx${target_device_version} --show-sdk-path
 
 cc=clang
 c_flags_platform=-target ${target_platform} -isysroot ${directory_sdk}
-c_flags=-O3 ${c_flags_platform} -I${directory_include} -I${directory_cer0_include} -I${directory_cexil_include} -I${directory_clic3_include}
+c_flags=-O3 ${c_flags_platform} -I${directory_include} -I${directory_cer0_include} -I${directory_cexil_include} -I${directory_clic3_include} -I${directory_math_c_include}
 c_flags_executable=-framework CoreAudio
 
 strip=strip
