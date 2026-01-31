@@ -40,7 +40,7 @@ jobs:
       - name: make_clic3
         run: cd clic3 && make target_device_version=${{ env.target_device_version_macos }}
       - name: make_math_c
-        run: cd math_c && make target_device_version=${{ env.target_device_version_macos }}
+        run: cd math_c && make math_c_dylib target_device_version=${{ env.target_device_version_macos }}
       - name: make_cer0
         run: cd cer0 && make target_device_version=${{ env.target_device_version_macos }}
       - name: make_cexil
