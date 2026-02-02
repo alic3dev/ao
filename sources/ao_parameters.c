@@ -11,7 +11,7 @@ int ao_parameters_parse(
   ao_parameters->export = 0;
   ao_parameters->help = 0;
   ao_parameters->octave_minimum = 0;
-  ao_parameters->octave_maximum = 10;
+  ao_parameters->octave_maximum = 12;
   ao_parameters->play = 0;
   ao_parameters->path_export = 0;
   ao_parameters->speed = 1;
@@ -174,6 +174,23 @@ int ao_parameters_parse(
         ao_parameters->octave_maximum = value;
       }
     }
+  }
+
+  if (
+    ao_parameters->octave_minimum >
+    ao_parameters->octave_maximum
+  ) {
+    char octave_hold = (
+      ao_parameters->octave_minimum
+    );
+
+    ao_parameters->octave_minimum = (
+      ao_parameters->octave_maximum
+    );
+
+    ao_parameters->octave_maximum = (
+      octave_hold
+    );
   }
 
   return (
