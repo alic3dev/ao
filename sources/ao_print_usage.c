@@ -18,6 +18,8 @@ void ao_print_usage(
     "  -o, -e, --export [output_path] : exports to a file\n"
     "    --play                       : plays audio while exporting (default is no audio output when exporting)\n"
     "  -b, --block                    : ceils and floors to maximum and minimum values\n"
+    "  --octave-minimum [#]           : sets the minimum octave\n"
+    "  --octave-maximum [#]           : sets the maximum octave\n"
     "  -s, --speed [#1+]              : the speed of file playback\n"
     "  -x, --synchronize_oscillator   : synchronizes oscillators to the speed value\n"
     "  -v, --visualizer               : displays an audio graph of the output\n"

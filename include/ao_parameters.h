@@ -8,6 +8,9 @@ struct ao_parameters {
 
   unsigned char block;
 
+  char octave_minimum;
+  char octave_maximum;
+
   unsigned long int speed;
   
   unsigned char synced_oscillator;

@@ -139,14 +139,14 @@ int main(
   }
 
   aio_data.note_table = cer0_note_table_create(
-    0,
-    12,
+    ao_parameters.octave_minimum,
+    ao_parameters.octave_maximum,
     cer0_frequency_root_standard
   );
 
   aio_data.length_note_table = cer0_note_table_length(
-    0,
-    12
+    ao_parameters.octave_minimum,
+    ao_parameters.octave_maximum
   );
 
   struct cer0_audio_output output_audio;

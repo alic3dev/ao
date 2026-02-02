@@ -10,8 +10,10 @@ int ao_parameters_parse(
   ao_parameters->block = 0;
   ao_parameters->export = 0;
   ao_parameters->help = 0;
+  ao_parameters->octave_minimum = 0;
+  ao_parameters->octave_maximum = 10;
   ao_parameters->play = 0;
-  ao_parameters->path_export = (void*)0;
+  ao_parameters->path_export = 0;
   ao_parameters->speed = 1;
   ao_parameters->synced_oscillator = 0;
   ao_parameters->visualizer = 0;
@@ -38,7 +40,7 @@ int ao_parameters_parse(
   ) {
     int index_parameter_valid = clic3_char_arrays_within(
       parameters[index_parameter],
-      16,
+      18,
       "-o",
       "-e",
       "--export",
@@ -54,7 +56,9 @@ int ao_parameters_parse(
       "-a",
       "--visualizer-average",
       "-h",
-      "--help"
+      "--help",
+      "--octave-minimum",
+      "--octave-maximum"
     );
 
     if (
@@ -132,6 +136,43 @@ int ao_parameters_parse(
       index_parameter_valid <= 15
     ) {
       ao_parameters->help = 1;
+    } else if (
+      index_parameter_valid == 16 ||
+      index_parameter_valid == 17
+    ) {
+      int value;
+
+      index_parameter = (
+        index_parameter +
+        1
+      );
+      
+      unsigned char status = clic3_char_array_to_int(
+        parameters[
+          index_parameter
+        ],
+        &value
+      );
+
+      if (
+        status != 0 ||
+        value < -127 ||
+        value > 127
+      ) {
+        return (
+          length_parameters +
+          index_parameter -
+          1
+        );
+      }
+
+      if (
+        index_parameter_valid == 16
+      ) {
+        ao_parameters->octave_minimum = value;
+      } else {
+        ao_parameters->octave_maximum = value;
+      }
     }
   }
 
