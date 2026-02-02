@@ -10,6 +10,8 @@ parameters:
   -o, -e, --export [output_path] : exports to a file
     --play                       : plays audio while exporting (default is no audio output when exporting)
   -b, --block                    : ceils and floors to maximum and minimum values
+  --octave-minimum [#]           : sets the minimum octave
+  --octave-maximum [#]           : sets the maximum octave
   -s, --speed [#1+]              : the speed of file playback
   -x, --synchronize_oscillator   : synchronizes oscillators to the speed value
   -v, --visualizer               : displays an audio graph of the output
