@@ -176,6 +176,23 @@ int ao_parameters_parse(
     }
   }
 
+  if (
+    ao_parameters->octave_minimum >
+    ao_parameters->octave_maximum
+  ) {
+    char octave_hold = (
+      ao_parameters->octave_minimum
+    );
+
+    ao_parameters->octave_minimum = (
+      ao_parameters->octave_maximum
+    );
+
+    ao_parameters->octave_maximum = (
+      octave_hold
+    );
+  }
+
   return (
     length_parameters -
     1
