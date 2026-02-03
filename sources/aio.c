@@ -1,6 +1,6 @@
 #include <aio.h>
 #include <aio_data.h>
-#include <aio_display.h>
+#include <aio_display_thread.h>
 #include <aio_export.h>
 #include <aio_frequency.h>
 #include <amplitude.h>
@@ -106,28 +106,24 @@ OSStatus aio(
           if (
             aio_data->visualizer_average == 0
           ) {
-            aio_display_next(
-              &aio_data->display
-            );
-
-            aio_display_update(
-              &aio_data->display,
+            aio_display_thread_queue_add(
+              &aio_data->display.data_thread,
               value_output
             );
           } else {
             value_average += value_output;
 
-            if (++frame >= length_value_average) {
+            if (
+              ++frame >= length_value_average
+            ) {
               value_average = (
-                value_average / ((float) length_value_average)
+                value_average / (
+                  (float) length_value_average
+                )
               );
 
-              aio_display_next(
-                &aio_data->display
-              );
-
-              aio_display_update(
-                &aio_data->display,
+              aio_display_thread_queue_add(
+                &aio_data->display.data_thread,
                 value_output
               );
 
@@ -138,7 +134,9 @@ OSStatus aio(
         }
       }
 
-      buffer_out[index_buffer_out] = (
+      buffer_out[
+        index_buffer_out
+      ] = (
         value_output
       );
 
@@ -166,16 +164,22 @@ OSStatus aio(
         );
 
         aio_data->index_file_input = (
-          aio_data->index_file_input + 1
-        ) % aio_data->length_file_inputs;
+          (
+            aio_data->index_file_input + 1
+          ) % (
+            aio_data->length_file_inputs
+          )
+        );
 
         if (
           aio_data->index_file_input == 0 &&
           aio_data->mode == export_play
         ) {
-          if (aio_data->visualizer != 0) {
-            aio_display_render(
-              &aio_data->display
+          if (
+            aio_data->visualizer != 0
+          ) {
+            pthread_mutex_unlock(
+              &aio_data->display.data_thread.mutex_render
             );
           }
 
@@ -191,9 +195,11 @@ OSStatus aio(
     }
   }
 
-  if (aio_data->visualizer != 0) {
-    aio_display_render(
-      &aio_data->display
+  if (
+    aio_data->visualizer != 0
+  ) {
+    pthread_mutex_unlock(
+      &aio_data->display.data_thread.mutex_render
     );
   }
 
