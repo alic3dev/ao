@@ -106,10 +106,6 @@ OSStatus aio(
           if (
             aio_data->visualizer_average == 0
           ) {
-            aio_display_next(
-              &aio_data->display
-            );
-
             aio_display_update(
               &aio_data->display,
               value_output
@@ -117,13 +113,13 @@ OSStatus aio(
           } else {
             value_average += value_output;
 
-            if (++frame >= length_value_average) {
+            if (
+              ++frame >= length_value_average
+            ) {
               value_average = (
-                value_average / ((float) length_value_average)
-              );
-
-              aio_display_next(
-                &aio_data->display
+                value_average / (
+                  (float) length_value_average
+                )
               );
 
               aio_display_update(
@@ -138,7 +134,9 @@ OSStatus aio(
         }
       }
 
-      buffer_out[index_buffer_out] = (
+      buffer_out[
+        index_buffer_out
+      ] = (
         value_output
       );
 
@@ -166,14 +164,20 @@ OSStatus aio(
         );
 
         aio_data->index_file_input = (
-          aio_data->index_file_input + 1
-        ) % aio_data->length_file_inputs;
+          (
+            aio_data->index_file_input + 1
+          ) % (
+            aio_data->length_file_inputs
+          )
+        );
 
         if (
           aio_data->index_file_input == 0 &&
           aio_data->mode == export_play
         ) {
-          if (aio_data->visualizer != 0) {
+          if (
+            aio_data->visualizer != 0
+          ) {
             aio_display_render(
               &aio_data->display
             );
@@ -191,7 +195,9 @@ OSStatus aio(
     }
   }
 
-  if (aio_data->visualizer != 0) {
+  if (
+    aio_data->visualizer != 0
+  ) {
     aio_display_render(
       &aio_data->display
     );
