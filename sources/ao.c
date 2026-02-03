@@ -156,7 +156,9 @@ int main(
     (void*)0
   );
 
-  if (aio_data.visualizer != 0) {
+  if (
+    aio_data.visualizer != 0
+  ) {
     aio_display_initialize(
       &aio_data.display
     );

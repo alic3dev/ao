@@ -1,5 +1,7 @@
 #include <aio_display.h>
 
+#include <aio_display_thread.h>
+
 #include <cexil.h>
 
 void aio_display_initialize(
@@ -26,7 +28,19 @@ void aio_display_initialize(
     &aio_display->sprite
   );
 
+  aio_display_thread_data_initialize(
+    &aio_display->data_thread,
+    aio_display
+  );
+
   aio_display->index_y_previous = 0;
+
+  pthread_create(
+    &aio_display->thread,
+    0,
+    aio_display_thread,
+    &aio_display->data_thread
+  );
 }
 
 void aio_display_update(
@@ -107,18 +121,33 @@ void aio_display_update(
 void aio_display_render(
   struct aio_display* aio_display
 ) {
-  cexil_renderer_render_clear(
-    &aio_display->renderer
-  );
-
-  cexil_renderer_render(
-    &aio_display->renderer
+  pthread_mutex_unlock(
+    &aio_display->data_thread.mutex_render
   );
 }
 
 void aio_display_destroy(
   struct aio_display* aio_display
 ) {
+  aio_display->data_thread.running = 0;
+
+  pthread_mutex_unlock(
+    &aio_display->data_thread.mutex_queue
+  );
+
+  pthread_mutex_unlock(
+    &aio_display->data_thread.mutex_render
+  );
+
+  pthread_join(
+    aio_display->thread,
+    0
+  );
+
+  aio_display_thread_data_destroy(
+    &aio_display->data_thread
+  );
+
   cexil_renderer_destroy(
     &aio_display->renderer
   );
