@@ -1,6 +1,6 @@
 #include <aio.h>
 #include <aio_data.h>
-#include <aio_display.h>
+#include <aio_display_thread.h>
 #include <aio_export.h>
 #include <aio_frequency.h>
 #include <amplitude.h>
@@ -106,8 +106,8 @@ OSStatus aio(
           if (
             aio_data->visualizer_average == 0
           ) {
-            aio_display_update(
-              &aio_data->display,
+            aio_display_thread_queue_add(
+              &aio_data->display.data_thread,
               value_output
             );
           } else {
@@ -122,8 +122,8 @@ OSStatus aio(
                 )
               );
 
-              aio_display_update(
-                &aio_data->display,
+              aio_display_thread_queue_add(
+                &aio_data->display.data_thread,
                 value_output
               );
 
@@ -178,8 +178,8 @@ OSStatus aio(
           if (
             aio_data->visualizer != 0
           ) {
-            aio_display_render(
-              &aio_data->display
+            pthread_mutex_unlock(
+              &aio_data->display.data_thread.mutex_render
             );
           }
 
@@ -198,8 +198,8 @@ OSStatus aio(
   if (
     aio_data->visualizer != 0
   ) {
-    aio_display_render(
-      &aio_data->display
+    pthread_mutex_unlock(
+      &aio_data->display.data_thread.mutex_render
     );
   }
 
