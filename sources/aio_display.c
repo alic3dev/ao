@@ -7,7 +7,7 @@
 void aio_display_initialize(
   struct aio_display* aio_display
 ) {
-  struct cexil_size size_terminal;
+  struct math_c_vector2_unsigned_int size_terminal;
 
   cexil_size_set_to_terminal(
     &size_terminal
@@ -52,13 +52,13 @@ void aio_display_update(
       aio_display->sprite.render_offset.x +
       1
     ) %
-    aio_display->renderer.size.width
+    aio_display->renderer.size.x
   );
 
   unsigned int index_y_frequency = (
     (((int)(
-      (((float)aio_display->sprite.size.height - 1) * frequency) / 2.0f
-    )) + ((aio_display->sprite.size.height - 1) / 2)) % (aio_display->sprite.size.height - 1)
+      (((float)aio_display->sprite.size.y - 1) * frequency) / 2.0f
+    )) + ((aio_display->sprite.size.y - 1) / 2)) % (aio_display->sprite.size.y - 1)
   );
 
   unsigned int distance_y_half = 0;
@@ -80,7 +80,7 @@ void aio_display_update(
   unsigned int offset_pixel_x_negative = (
     aio_display->sprite.render_offset.x == 0
     ? (
-      aio_display->sprite.size.width -
+      aio_display->sprite.size.x -
       1
     )
     : (
@@ -91,7 +91,7 @@ void aio_display_update(
 
   for (
     unsigned int index_y_pixel = 0;
-    index_y_pixel < aio_display->sprite.size.height;
+    index_y_pixel < aio_display->sprite.size.y;
     ++index_y_pixel
   ) {
     aio_display->sprite.pixels[
