@@ -146,7 +146,7 @@ int ao_parameters_parse(
         index_parameter +
         1
       );
-      
+
       unsigned char status = clic3_char_array_to_int(
         parameters[
           index_parameter

@@ -21,7 +21,6 @@ void aio_display_initialize(
   struct aio_display*
 );
 
-
 void aio_display_update(
   struct aio_display*,
   float
