@@ -12,9 +12,9 @@ struct ao_parameters {
   char octave_maximum;
 
   unsigned long int speed;
-  
+
   unsigned char synced_oscillator;
-  
+
   unsigned char visualizer;
   unsigned char visualizer_average;
 

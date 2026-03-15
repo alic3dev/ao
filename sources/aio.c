@@ -47,12 +47,12 @@ OSStatus aio(
     );
 
     unsigned long int count_channel_out = audio_buffer_current.mNumberChannels;
-    
+
     float value_average = 0.0f;
     float value_output = 0.0f;
     unsigned int length_value_average = 10;
     unsigned int frame = 0;
-    
+
     for (
       unsigned long int index_buffer_out = 0;
       index_buffer_out < size_buffer_out;
@@ -149,7 +149,7 @@ OSStatus aio(
           value_output
         );
       }
- 
+
       if (
         feof(
           aio_data->file_inputs[
