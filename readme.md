@@ -47,4 +47,4 @@ make clean
 
 ## copyleft|copyright
 
-> copy_right_copy_left:alic3dev[2025]\_all_rights_reserved_all_lefts_reserved
+> copy_right_copy_left:alic3dev[2025|2026]\_all_rights_reserved_all_lefts_reserved
