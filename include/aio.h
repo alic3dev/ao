@@ -1,5 +1,5 @@
-#ifndef __aio_h
-#define __aio_h
+#ifndef __ao_aio_h
+#define __ao_aio_h
 
 #include <CoreAudio/CoreAudio.h>
 
@@ -10,7 +10,7 @@ OSStatus aio(
  const AudioTimeStamp*,
  AudioBufferList*,
  const AudioTimeStamp*,
- void *
+ void*
 );
 
 #endif

@@ -1,5 +1,5 @@
-#ifndef __aio_display_thread_h
-#define __aio_display_thread_h
+#ifndef __ao_aio_display_thread_h
+#define __ao_aio_display_thread_h
 
 #include <pthread.h>
 

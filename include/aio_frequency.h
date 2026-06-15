@@ -1,5 +1,5 @@
-#ifndef __aio_frequency_h
-#define __aio_frequency_h
+#ifndef __ao_aio_frequency_h
+#define __ao_aio_frequency_h
 
 #include <aio_data.h>
 

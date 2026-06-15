@@ -1,5 +1,5 @@
-#ifndef __ao_parameters_h
-#define __ao_parameters_h
+#ifndef __ao_ao_parameters_h
+#define __ao_ao_parameters_h
 
 struct ao_parameters {
   unsigned char export;

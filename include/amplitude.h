@@ -1,5 +1,5 @@
-#ifndef __amplitude_h
-#define __amplitude_h
+#ifndef __ao_amplitude_h
+#define __ao_amplitude_h
 
 extern float amplitude;
 

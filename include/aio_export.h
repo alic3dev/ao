@@ -1,5 +1,5 @@
-#ifndef __aio_export_h
-#define __aio_export_h
+#ifndef __ao_aio_export_h
+#define __ao_aio_export_h
 
 #include <aio_data.h>
 

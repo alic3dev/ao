@@ -1,5 +1,5 @@
-#ifndef __aio_display_h
-#define __aio_display_h
+#ifndef __ao_aio_display_h
+#define __ao_aio_display_h
 
 #include <aio_display_thread.h>
 
