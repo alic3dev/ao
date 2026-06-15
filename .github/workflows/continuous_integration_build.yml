@@ -37,6 +37,11 @@ jobs:
         with:
           repository: alic3dev/clic3
           path: clic3
+      - name: checkout_interrupt_handler
+        uses: actions/checkout@v5
+        with:
+          repository: alic3dev/interrupt_handler
+          path: interrupt_handler
       - name: make_clic3
         run: cd clic3 && make target_device_version=${{ env.target_device_version_macos }}
       - name: make_math_c
@@ -45,5 +50,7 @@ jobs:
         run: cd cer0 && make target_device_version=${{ env.target_device_version_macos }}
       - name: make_cexil
         run: cd cexil && make target_device_version=${{ env.target_device_version_macos }}
+      - name: make_interrupt_handler
+        run: cd interrupt_handler && make target_device_version=${{ env.target_device_version_macos }}
       - name: make_ao
         run: cd ao && make target_device_version=${{ env.target_device_version_macos }}
