@@ -11,26 +11,33 @@ void aio_display_thread_data_initialize(
   struct aio_display_thread_data* aio_display_thread_data,
   void* display
 ) {
-  aio_display_thread_data->display = display;
+  aio_display_thread_data->display = (
+    display
+  );
 
   pthread_mutex_init(
     &aio_display_thread_data->mutex_queue,
-    0
+    0x00
   );
 
   pthread_mutex_init(
     &aio_display_thread_data->mutex_render,
-    0
+    0x00
   );
 
-  aio_display_thread_data->length_queue = 0;
+  aio_display_thread_data->length_queue = (
+    0x00
+  );
+  
   aio_display_thread_data->queue = (
     clic3_memory_allocate_raw(
-      0
+      0x00
     )
   );
 
-  aio_display_thread_data->running = 1;
+  aio_display_thread_data->running = (
+    0x01
+  );
 }
 
 void aio_display_thread_queue_add(
@@ -43,7 +50,7 @@ void aio_display_thread_queue_add(
 
   aio_display_thread_data->length_queue = (
     aio_display_thread_data->length_queue +
-    1
+    0x01
   );
 
   clic3_memory_reallocate_raw(
@@ -58,7 +65,7 @@ void aio_display_thread_queue_add(
 
   aio_display_thread_data->queue[
     aio_display_thread_data->length_queue -
-    1
+    0x01
   ] = (
     frequency
   );
@@ -80,7 +87,8 @@ void* aio_display_thread(
   );
 
   while(
-    aio_display_thread_data->running == 1
+    aio_display_thread_data->running ==
+    0x01
   ) {
     pthread_mutex_lock(
       &aio_display_thread_data->mutex_render
@@ -91,7 +99,8 @@ void* aio_display_thread(
     );
 
     if (
-      aio_display_thread_data->running != 1
+      aio_display_thread_data->running !=
+      0x01
     ) {
       pthread_mutex_unlock(
         &aio_display_thread_data->mutex_queue
@@ -123,10 +132,13 @@ void* aio_display_thread(
       length_queue_buffered
     );
 
-    aio_display_thread_data->length_queue = 0;
+    aio_display_thread_data->length_queue = (
+      0x00
+    );
+    
     clic3_memory_reallocate_raw(
       &aio_display_thread_data->queue,
-      0
+      0x00
     );
 
     pthread_mutex_unlock(
@@ -134,8 +146,13 @@ void* aio_display_thread(
     );
 
     for (
-      unsigned int index_queue_buffered = 0;
-      index_queue_buffered < length_queue_buffered;
+      unsigned int index_queue_buffered = (
+        0x00
+      );
+      (
+        index_queue_buffered <
+        length_queue_buffered
+      );
       ++index_queue_buffered
     ) {
       aio_display_update(
@@ -160,7 +177,7 @@ void* aio_display_thread(
   };
 
   return (
-    0
+    0x00
   );
 }
 

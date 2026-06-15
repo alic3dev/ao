@@ -7,73 +7,145 @@ int ao_parameters_parse(
   int length_parameters,
   char** parameters
 ) {
-  ao_parameters->block = 0;
-  ao_parameters->export = 0;
-  ao_parameters->help = 0;
-  ao_parameters->octave_minimum = 0;
-  ao_parameters->octave_maximum = 12;
-  ao_parameters->play = 0;
-  ao_parameters->path_export = 0;
-  ao_parameters->speed = 1;
-  ao_parameters->synced_oscillator = 0;
-  ao_parameters->visualizer = 0;
-  ao_parameters->visualizer_average = 0;
+  ao_parameters->block = (
+    0x00
+  );
+  
+  ao_parameters->export = (
+    0x00
+  );
+  
+  ao_parameters->help = (
+    0x00
+  );
+  
+  ao_parameters->octave_minimum = (
+    0x00
+  );
+  
+  ao_parameters->octave_maximum = (
+    0x0c
+  );
+  
+  ao_parameters->play = (
+    0x00
+  );
+  
+  ao_parameters->path_export = (
+    0x00
+  );
+  
+  ao_parameters->speed = (
+    0x01
+  );
+  
+  ao_parameters->synced_oscillator = (
+    0x00
+  );
+  
+  ao_parameters->visualizer = (
+    0x00
+  );
+  
+  ao_parameters->visualizer_average = (
+    0x00
+  );
 
   if (
-    length_parameters == 2 &&
+    (
+      length_parameters ==
+      0x02
+    ) &&
     clic3_char_arrays_within(
-      parameters[1],
-      2,
+      parameters[
+        0x01
+      ],
+      0x02,
       "-h",
       "--help"
-    ) != -1
+    ) !=
+    -0x01
   ) {
-    ao_parameters->help = 1;
+    ao_parameters->help = (
+      0x01
+    );
 
-    return 0;
+    return (
+      0x00
+    );
   }
 
   for (
-    unsigned int index_parameter = 1;
-    index_parameter < length_parameters - 1;
+    unsigned int index_parameter = (
+      0x01
+    );
+    (
+      index_parameter <
+      (
+        length_parameters -
+        0x01
+      )
+    );
     ++index_parameter
   ) {
-    int index_parameter_valid = clic3_char_arrays_within(
-      parameters[index_parameter],
-      18,
-      "-o",
-      "-e",
-      "--export",
-      "--play",
-      "-v",
-      "--visualizer",
-      "-s",
-      "--speed",
-      "-b",
-      "--block",
-      "-x",
-      "--synchronize-oscillator",
-      "-a",
-      "--visualizer-average",
-      "-h",
-      "--help",
-      "--octave-minimum",
-      "--octave-maximum"
+    int index_parameter_valid = (
+      clic3_char_arrays_within(
+        parameters[
+          index_parameter
+        ],
+        0x12,
+        "-o",
+        "-e",
+        "--export",
+        "--play",
+        "-v",
+        "--visualizer",
+        "-s",
+        "--speed",
+        "-b",
+        "--block",
+        "-x",
+        "--synchronize-oscillator",
+        "-a",
+        "--visualizer-average",
+        "-h",
+        "--help",
+        "--octave-minimum",
+        "--octave-maximum"
+      )
     );
 
     if (
-      index_parameter_valid == -1
+      index_parameter_valid ==
+      -0x01
     ) {
-      return index_parameter;
+      return (
+        index_parameter
+      );
     } else if (
-      index_parameter_valid >= 0 &&
-      index_parameter_valid <= 2 &&
-      index_parameter < length_parameters - 1
+      (
+        index_parameter_valid >=
+        0x00
+      ) &&
+      (
+        index_parameter_valid <=
+        0x02
+      ) &&
+      (
+        index_parameter <
+        (
+          length_parameters -
+          0x01
+        )
+      )
     ) {
-      ao_parameters->export = 1;
+      ao_parameters->export = (
+        0x01
+      );
 
       index_parameter = (
-        index_parameter + 1
+        index_parameter +
+        0x01
       );
 
       ao_parameters->path_export = (
@@ -82,96 +154,182 @@ int ao_parameters_parse(
         ]
       );
     } else if (
-      index_parameter_valid == 3
+      index_parameter_valid ==
+      0x03
     ) {
-      ao_parameters->play = 1;
+      ao_parameters->play = (
+        0x01
+      );
     } else if (
-      index_parameter_valid >= 4 &&
-      index_parameter_valid <= 5
+      (
+        index_parameter_valid >=
+        0x04
+      ) &&
+      (
+        index_parameter_valid <=
+        0x05
+      )
     ) {
-      ao_parameters->visualizer = 1;
+      ao_parameters->visualizer = (
+        0x01
+      );
     } else if (
-      index_parameter_valid >= 6 &&
-      index_parameter_valid <= 7 &&
-      index_parameter < length_parameters - 1
+      (
+        index_parameter_valid >=
+        0x06
+      ) &&
+      (
+        index_parameter_valid <=
+        0x07
+      ) &&
+      (
+        index_parameter <
+        (
+          length_parameters -
+          0x01
+        )
+      )
     ) {
       index_parameter = (
-        index_parameter + 1
+        index_parameter +
+        0x01
       );
 
-      unsigned char status = clic3_char_array_to_unsigned_long_int(
-        parameters[
-          index_parameter
-        ],
-        &ao_parameters->speed
+      unsigned char status = (
+        clic3_char_array_to_unsigned_long_int(
+          parameters[
+            index_parameter
+          ],
+          &ao_parameters->speed
+        )
       );
 
       if (
-        status != 0 ||
-        ao_parameters->speed < 1
+        (
+          status !=
+          0x00
+        ) ||
+        (
+          ao_parameters->speed <
+          0x01
+        )
       ) {
         return (
           length_parameters +
           index_parameter -
-          1
+          0x01
         );
       }
     } else if (
-      index_parameter_valid >= 8 &&
-      index_parameter_valid <= 9
+      (
+        index_parameter_valid >=
+        0x08
+      ) &&
+      (
+        index_parameter_valid <=
+        0x09
+      )
     ) {
-      ao_parameters->block = 1;
+      ao_parameters->block = (
+        0x01
+      );
     } else if (
-      index_parameter_valid >= 10 &&
-      index_parameter_valid <= 11
+      (
+        index_parameter_valid >=
+        0x0a
+      ) &&
+      (
+        index_parameter_valid <=
+        0x0b
+      )
     ) {
-      ao_parameters->synced_oscillator = 1;
+      ao_parameters->synced_oscillator = (
+        0x01
+      );
     } else if (
-      index_parameter_valid >= 12 &&
-      index_parameter_valid <= 13
+      (
+        index_parameter_valid >=
+        0x0c
+      ) &&
+      (
+        index_parameter_valid <=
+        0x0d
+      )
     ) {
-      ao_parameters->visualizer_average = 1;
+      ao_parameters->visualizer_average = (
+        0x01
+      );
     } else if (
-      index_parameter_valid >= 14 &&
-      index_parameter_valid <= 15
+      (
+        index_parameter_valid >=
+        0x0e
+      ) &&
+      (
+        index_parameter_valid <=
+        0x0f
+      )
     ) {
-      ao_parameters->help = 1;
+      ao_parameters->help = (
+        0x01
+      );
     } else if (
-      index_parameter_valid == 16 ||
-      index_parameter_valid == 17
+      (
+        index_parameter_valid ==
+        0x10
+      ) ||
+      (
+        index_parameter_valid ==
+        0x11
+      )
     ) {
       int value;
 
       index_parameter = (
         index_parameter +
-        1
+        0x01
       );
 
-      unsigned char status = clic3_char_array_to_int(
-        parameters[
-          index_parameter
-        ],
-        &value
+      unsigned char status = (
+        clic3_char_array_to_int(
+          parameters[
+            index_parameter
+          ],
+          &value
+        )
       );
 
       if (
-        status != 0 ||
-        value < -127 ||
-        value > 127
+        (
+          status !=
+          0x00
+        ) ||
+        (
+          value <
+          -0x7f
+        ) ||
+        (
+          value >
+          0x7f
+        )
       ) {
         return (
           length_parameters +
           index_parameter -
-          1
+          0x01
         );
       }
 
       if (
-        index_parameter_valid == 16
+        index_parameter_valid ==
+        0x10
       ) {
-        ao_parameters->octave_minimum = value;
+        ao_parameters->octave_minimum = (
+          value
+        );
       } else {
-        ao_parameters->octave_maximum = value;
+        ao_parameters->octave_maximum = (
+          value
+        );
       }
     }
   }
@@ -195,6 +353,6 @@ int ao_parameters_parse(
 
   return (
     length_parameters -
-    1
+    0x01
   );
 }

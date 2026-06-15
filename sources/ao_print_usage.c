@@ -6,7 +6,10 @@ void ao_print_usage(
   unsigned char to_error_stream
 ) {
   FILE* stream_output = (
-    to_error_stream == 0
+    (
+      to_error_stream ==
+      0x00
+    )
     ? stdout
     : stderr
   );

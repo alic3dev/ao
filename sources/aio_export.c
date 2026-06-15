@@ -10,13 +10,17 @@ int aio_export_write(
   FILE* file_export,
   float frequency
 ) {
-  signed int status_write = fprintf(
-    file_export,
-    "%f,",
-    frequency
+  signed int status_write = (
+    fprintf(
+      file_export,
+      "%f,",
+      frequency
+    )
   );
 
-  return status_write;
+  return (
+    status_write
+  );
 }
 
 void aio_export_data(
@@ -37,23 +41,27 @@ void aio_export_data(
     )
   ) {
     while(
-      !feof(
+      feof(
         aio_data->file_inputs[
           aio_data->index_file_input
         ]
-      )
+      ) ==
+      0x00
     ) {
       aio_frequency_get(
         aio_data
       );
 
-      int status_write = aio_export_write(
-        aio_data->file_output,
-        aio_data->frequency
+      int status_write = (
+        aio_export_write(
+          aio_data->file_output,
+          aio_data->frequency
+        )
       );
 
       if (
-        status_write < 0
+        status_write <
+        0x00
       ) {
         fprintf(
           stderr,
@@ -62,7 +70,8 @@ void aio_export_data(
         );
 
         aio_data->index_file_input = (
-          aio_data->length_file_inputs - 1
+          aio_data->length_file_inputs -
+          0x01
         );
 
         break;
@@ -70,7 +79,8 @@ void aio_export_data(
     }
 
     aio_data->index_file_input = (
-      aio_data->index_file_input + 1
+      aio_data->index_file_input +
+      0x01
     );
   }
 

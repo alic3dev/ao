@@ -22,23 +22,38 @@ OSStatus aio(
   const AudioTimeStamp* timestamp_audio_out,
   void* data
 ) {
-  unsigned long int count_buffer = buffer_list_audio_out->mNumberBuffers;
+  unsigned long int count_buffer = (
+    buffer_list_audio_out->mNumberBuffers
+  );
 
-  struct aio_data* aio_data = data;
+  struct aio_data* aio_data = (
+    data
+  );
 
   if (
-    aio_data->initialized == 0 || 
-    (
-      aio_data->mode == export_play &&
-      aio_data->exporting == 0
-    )
+    aio_data->initialized ==
+    0x00
   ) {
-    return 0;
+    return (
+      0x00
+    );
   }
   
   if (
-    interrupt_handler_interrupted !=
-    0x00
+    (
+      interrupt_handler_interrupted !=
+      0x00
+    ) ||
+    (
+      (
+        aio_data->mode ==
+        export_play
+      ) &&
+      (
+        aio_data->exporting ==
+        0x00
+      )
+    )
   ) {
     pthread_mutex_unlock(
       &aio_data->mutex_playing
@@ -50,38 +65,81 @@ OSStatus aio(
   }
 
   for (
-    unsigned long int index_buffer = 0;
-    index_buffer < count_buffer;
+    unsigned long int index_buffer = (
+      0x00
+    );
+    (
+      index_buffer <
+      count_buffer
+    );
     ++index_buffer
   ) {
-    AudioBuffer audio_buffer_current = buffer_list_audio_out->mBuffers[index_buffer];
+    AudioBuffer audio_buffer_current = (
+      buffer_list_audio_out->mBuffers[
+        index_buffer
+      ]
+    );
 
-    float* buffer_out = audio_buffer_current.mData;
+    float* buffer_out = (
+      audio_buffer_current.mData
+    );
 
     unsigned long int size_buffer_out = (
       audio_buffer_current.mDataByteSize /
-      sizeof(float)
+      sizeof(
+        float
+      )
     );
 
-    unsigned long int count_channel_out = audio_buffer_current.mNumberChannels;
+    unsigned long int count_channel_out = (
+      audio_buffer_current.mNumberChannels
+    );
 
-    float value_average = 0.0f;
-    float value_output = 0.0f;
-    unsigned int length_value_average = 10;
-    unsigned int frame = 0;
+    float value_average = (
+      0x00
+    );
+    
+    float value_output = (
+      0x00
+    );
+    
+    unsigned int length_value_average = (
+      0x0a
+    );
+    
+    unsigned int frame = (
+      0x00
+    );
 
     for (
-      unsigned long int index_buffer_out = 0;
-      index_buffer_out < size_buffer_out;
+      unsigned long int index_buffer_out = (
+        0x00
+      );
+      (
+        index_buffer_out <
+        size_buffer_out
+      );
       ++index_buffer_out
     ) {
-      unsigned long int channel = index_buffer_out % count_channel_out;
+      unsigned long int channel = (
+        index_buffer_out %
+        count_channel_out
+      );
 
-      if (channel == 0) {
+      if (
+        channel ==
+        0x00
+      ) {
         if (
-          (aio_data->index_output % aio_data->speed) == 0
+          (
+            aio_data->index_output %
+            aio_data->speed
+          ) ==
+          0x00
         ) {
-          aio_data->index_output = 1;
+          aio_data->index_output = (
+            0x01
+          );
 
           aio_frequency_get(
             aio_data
@@ -93,59 +151,97 @@ OSStatus aio(
           );
 
           if (
-            aio_data->synced_oscillator == 1
+            aio_data->synced_oscillator ==
+            0x01
           ) {
-            aio_data->value = cer0_oscillator_poll(
-              &aio_data->oscillator
+            aio_data->value = (
+              cer0_oscillator_poll(
+                &aio_data->oscillator
+              )
             );
           }
         } else {
           aio_data->index_output = (
-            aio_data->index_output + 1
+            aio_data->index_output +
+            0x01
           );
         }
 
         if (
-          aio_data->synced_oscillator != 1
+          aio_data->synced_oscillator !=
+          0x01
         ) {
-          aio_data->value = cer0_oscillator_poll(
-            &aio_data->oscillator
+          aio_data->value = (
+            cer0_oscillator_poll(
+              &aio_data->oscillator
+            )
           );
         }
 
         value_output = (
-          (aio_data->block == 1)
-          ? ((aio_data->value * amplitude) > 0.0f ? 1.0f : -1.0f)
-          : aio_data->value * amplitude
+          (
+            aio_data->block ==
+            0x01
+          )
+          ? (
+            (
+              (
+                aio_data->value *
+                amplitude
+              ) >
+              0x00
+            )
+            ? 0x01
+            : -0x01
+          )
+          : (
+            aio_data->value *
+            amplitude
+          )
         );
 
-        if (aio_data->visualizer != 0) {
+        if (
+          aio_data->visualizer !=
+          0x00
+        ) {
           if (
-            aio_data->visualizer_average == 0
+            aio_data->visualizer_average ==
+            0x00
           ) {
             aio_display_thread_queue_add(
               &aio_data->display.data_thread,
               value_output
             );
           } else {
-            value_average += value_output;
+            value_average = (
+              value_average +
+              value_output
+            );
 
             if (
-              ++frame >= length_value_average
+              ++frame >=
+              length_value_average
             ) {
               value_average = (
-                value_average / (
-                  (float) length_value_average
+                value_average /
+                (
+                  (float)
+                  length_value_average
                 )
               );
 
               aio_display_thread_queue_add(
                 &aio_data->display.data_thread,
-                value_output
+                value_average
               );
 
-              frame = 0;
-              value_average = 0.0f;
+              frame = (
+                0x00
+              );
+              
+              value_average = (
+                0x00
+              );
             }
           }
         }
@@ -158,8 +254,14 @@ OSStatus aio(
       );
 
       if (
-        aio_data->mode == export_play &&
-        aio_data->exporting != 0
+        (
+          aio_data->mode ==
+          export_play
+        ) &&
+        (
+          aio_data->exporting !=
+          0x00
+        )
       ) {
         aio_export_write(
           aio_data->file_output,
@@ -182,43 +284,57 @@ OSStatus aio(
 
         aio_data->index_file_input = (
           (
-            aio_data->index_file_input + 1
-          ) % (
-            aio_data->length_file_inputs
-          )
+            aio_data->index_file_input +
+            0x01
+          ) %
+          aio_data->length_file_inputs
         );
 
         if (
-          aio_data->index_file_input == 0 &&
-          aio_data->mode == export_play
+          (
+            aio_data->index_file_input ==
+            0x00
+          ) &&
+          (
+            aio_data->mode ==
+            export_play
+          )
         ) {
           if (
-            aio_data->visualizer != 0
+            aio_data->visualizer !=
+            0x00
           ) {
             pthread_mutex_unlock(
               &aio_data->display.data_thread.mutex_render
             );
           }
 
-          aio_data->exporting = 0;
+          aio_data->exporting = (
+            0x00
+          );
 
           pthread_mutex_unlock(
             &mutex_exporting
           );
 
-          return 0;
+          return (
+            0x00
+          );
         }
       }
     }
   }
 
   if (
-    aio_data->visualizer != 0
+    aio_data->visualizer !=
+    0x00
   ) {
     pthread_mutex_unlock(
       &aio_data->display.data_thread.mutex_render
     );
   }
 
-  return 0;
+  return (
+    0x00
+  );
 }
