@@ -5,6 +5,7 @@
 
 #include <cer0.h>
 
+#include <pthread.h>
 #include <stdio.h>
 
 enum mode_aio_data {
@@ -42,6 +43,8 @@ struct aio_data {
   unsigned char synced_oscillator;
   unsigned char visualizer;
   unsigned char visualizer_average;
+  
+  pthread_mutex_t mutex_playing;
 };
 
 #endif

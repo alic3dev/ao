@@ -1,9 +1,12 @@
 #include <aio.h>
+
 #include <aio_data.h>
 #include <aio_display_thread.h>
 #include <aio_export.h>
 #include <aio_frequency.h>
 #include <amplitude.h>
+
+#include <interrupt_handler.h>
 
 #include <pthread.h>
 #include <stdio.h>
@@ -24,12 +27,26 @@ OSStatus aio(
   struct aio_data* aio_data = data;
 
   if (
-    aio_data->initialized == 0 || (
+    aio_data->initialized == 0 || 
+    (
       aio_data->mode == export_play &&
       aio_data->exporting == 0
     )
   ) {
     return 0;
+  }
+  
+  if (
+    interrupt_handler_interrupted !=
+    0x00
+  ) {
+    pthread_mutex_unlock(
+      &aio_data->mutex_playing
+    );
+  
+    return (
+      0x00
+    );
   }
 
   for (

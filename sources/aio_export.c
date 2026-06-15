@@ -2,6 +2,8 @@
 #include <aio_data.h>
 #include <aio_frequency.h>
 
+#include <interrupt_handler.h>
+
 #include <stdio.h>
 
 int aio_export_write(
@@ -25,8 +27,14 @@ void aio_export_data(
   );
 
   while (
-    aio_data->index_file_input <
-    aio_data->length_file_inputs
+    (
+      aio_data->index_file_input <
+      aio_data->length_file_inputs
+    ) &&
+    (
+      interrupt_handler_interrupted ==
+      0x00
+    )
   ) {
     while(
       !feof(

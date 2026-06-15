@@ -10,6 +10,8 @@
 
 #include <clic3_memory.h>
 
+#include <interrupt_handler.h>
+
 #include <stdio.h>
 
 int main(
@@ -158,8 +160,13 @@ int main(
   struct cer0_audio_output output_audio;
 
   pthread_mutex_init(
+    &aio_data.mutex_playing,
+    0x00
+  );
+
+  pthread_mutex_init(
     &mutex_exporting,
-    (void*)0
+    0x00
   );
 
   if (
@@ -174,9 +181,18 @@ int main(
     aio_data.mode == export_play ||
     aio_data.mode == play
   ) {
-    pthread_mutex_lock(
-      &mutex_exporting
-    );
+    if (
+      aio_data.mode ==
+      play
+    ) {
+      pthread_mutex_lock(
+        &aio_data.mutex_playing
+      );
+    } else {
+      pthread_mutex_lock(
+        &mutex_exporting
+      );
+    }
 
     cer0_audio_output_initialize(
       &output_audio,
@@ -199,10 +215,26 @@ int main(
       &aio_data
     );
   }
-
+  
+  interrupt_handler_initialize();
+  
+  pthread_mutex_lock(
+    &aio_data.mutex_playing
+  );
+  
   pthread_mutex_lock(
     &mutex_exporting
   );
+  
+  pthread_mutex_destroy(
+    &mutex_exporting
+  );
+  
+  pthread_mutex_destroy(
+    &aio_data.mutex_playing
+  );
+  
+  interrupt_handler_destroy();
 
   if (
     aio_data.mode == export_play ||
