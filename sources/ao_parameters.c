@@ -1,6 +1,6 @@
 #include <ao_parameters.h>
 
-#include <clic3.h>
+#include <clic3_char_arrays.h>
 
 int ao_parameters_parse(
   struct ao_parameters* ao_parameters,

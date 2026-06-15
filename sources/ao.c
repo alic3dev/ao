@@ -8,6 +8,8 @@
 
 #include <cer0.h>
 
+#include <clic3_memory.h>
+
 #include <stdio.h>
 
 int main(
@@ -96,9 +98,13 @@ int main(
     length_parameters - index_parameters_input
   );
 
-  aio_data.file_inputs = malloc(
-    sizeof(FILE*) *
-    aio_data.length_file_inputs
+  aio_data.file_inputs = (
+    clic3_memory_allocate_raw(
+      sizeof(
+        FILE*
+      ) *
+      aio_data.length_file_inputs
+    )
   );
 
   for (
@@ -219,8 +225,13 @@ int main(
     );
   }
 
-  free(aio_data.file_inputs);
-  free(aio_data.note_table);
+  clic3_memory_free_raw(
+    aio_data.file_inputs
+  );
+  
+  clic3_memory_free_raw(
+    aio_data.note_table
+  );
 
   if (aio_data.visualizer != 0) {
     aio_display_destroy(
