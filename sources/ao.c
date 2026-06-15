@@ -215,7 +215,7 @@ int main(
           ]
         );
       }
-      
+
       clic3_memory_free_raw(
         aio_data.file_inputs
       );
@@ -300,25 +300,25 @@ int main(
       &aio_data
     );
   }
-  
+
   interrupt_handler_initialize();
-  
+
   pthread_mutex_lock(
     &aio_data.mutex_playing
   );
-  
+
   pthread_mutex_lock(
     &mutex_exporting
   );
-  
+
   pthread_mutex_destroy(
     &mutex_exporting
   );
-  
+
   pthread_mutex_destroy(
     &aio_data.mutex_playing
   );
-  
+
   interrupt_handler_destroy();
 
   if (
@@ -356,7 +356,7 @@ int main(
   clic3_memory_free_raw(
     aio_data.file_inputs
   );
-  
+
   clic3_memory_free_raw(
     aio_data.note_table
   );

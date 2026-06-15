@@ -38,7 +38,7 @@ OSStatus aio(
       0x00
     );
   }
-  
+
   if (
     (
       interrupt_handler_interrupted !=
@@ -58,7 +58,7 @@ OSStatus aio(
     pthread_mutex_unlock(
       &aio_data->mutex_playing
     );
-  
+
     return (
       0x00
     );
@@ -98,15 +98,15 @@ OSStatus aio(
     float value_average = (
       0x00
     );
-    
+
     float value_output = (
       0x00
     );
-    
+
     unsigned int length_value_average = (
       0x0a
     );
-    
+
     unsigned int frame = (
       0x00
     );
@@ -238,7 +238,7 @@ OSStatus aio(
               frame = (
                 0x00
               );
-              
+
               value_average = (
                 0x00
               );

@@ -10,43 +10,43 @@ int ao_parameters_parse(
   ao_parameters->block = (
     0x00
   );
-  
+
   ao_parameters->export = (
     0x00
   );
-  
+
   ao_parameters->help = (
     0x00
   );
-  
+
   ao_parameters->octave_minimum = (
     0x00
   );
-  
+
   ao_parameters->octave_maximum = (
     0x0c
   );
-  
+
   ao_parameters->play = (
     0x00
   );
-  
+
   ao_parameters->path_export = (
     0x00
   );
-  
+
   ao_parameters->speed = (
     0x01
   );
-  
+
   ao_parameters->synced_oscillator = (
     0x00
   );
-  
+
   ao_parameters->visualizer = (
     0x00
   );
-  
+
   ao_parameters->visualizer_average = (
     0x00
   );

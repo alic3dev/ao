@@ -28,7 +28,7 @@ void aio_display_thread_data_initialize(
   aio_display_thread_data->length_queue = (
     0x00
   );
-  
+
   aio_display_thread_data->queue = (
     clic3_memory_allocate_raw(
       0x00
@@ -135,7 +135,7 @@ void* aio_display_thread(
     aio_display_thread_data->length_queue = (
       0x00
     );
-    
+
     clic3_memory_reallocate_raw(
       &aio_display_thread_data->queue,
       0x00
