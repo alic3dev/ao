@@ -43,7 +43,7 @@ jobs:
           repository: alic3dev/interrupt_handler
           path: interrupt_handler
       - name: make_clic3
-        run: cd clic3 && make target_device_version=${{ env.target_device_version_macos }}
+        run: cd clic3 && make clic3_without_metal target_device_version=${{ env.target_device_version_macos }}
       - name: make_math_c
         run: cd math_c && make math_c_dylib math_c_dynamic math_c_object math_c_static target_device_version=${{ env.target_device_version_macos }}
       - name: make_cer0
